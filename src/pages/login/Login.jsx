@@ -8,6 +8,7 @@ import logo from '../../images/logo.png';
 const Login = ()=>{
 
     return <div className={style.hero}>
+        <div className={style.loginBody}>
 
         <div className={style.login}>
            <div className={style.logo}>
@@ -29,9 +30,13 @@ const Login = ()=>{
                <input type="password" name="password" placeholder="password"/>
                    </div>
             </div>
+            <div>
+                
+            </div>
             <button onClick={()=>{console.log('click');}} className={style.signinBtn}>Login</button> 
-
+         </div>
         </div>
+
         
         <div className={style.highway}></div>
         <div className={style.city}></div>
