@@ -3,9 +3,17 @@ import style from '../login/Login.module.css'
 import Car from '../../images/car-animation/car.png';
 import wheel from '../../images/car-animation/wheel.png';
 import logo from '../../images/logo.png';
+import {useHistory} from 'react-router-dom';
 
 
 const Login = ()=>{
+
+    const history = useHistory();
+
+    const onLogin = () =>{
+        localStorage.setItem('role','admin')
+        history.push('/home')
+    }
 
     return <div className={style.hero}>
         <div className={style.loginBody}>
@@ -33,7 +41,7 @@ const Login = ()=>{
             <div>
                 
             </div>
-            <button onClick={()=>{console.log('click');}} className={style.signinBtn}>Login</button> 
+            <button onClick={onLogin} className={style.signinBtn}>Login</button> 
          </div>
         </div>
 
