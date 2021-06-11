@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {useState} from 'react'
 import 'antd/dist/antd.css';
 import { Layout, Menu} from 'antd';
 import {
@@ -9,7 +9,7 @@ import {
     TeamOutlined,
     UserOutlined,
   } from '@ant-design/icons';
-  const { Sider } = Layout;
+  const {  Sider } = Layout;
 const { SubMenu } = Menu;
 
 
@@ -21,21 +21,19 @@ const { SubMenu } = Menu;
 
 const SideBar = ()=>{
 
-    // state = {
-    //     collapsed: false,
-    //   };
-    
-    //   onCollapse = collapsed => {
-    //     console.log(collapsed);
-    //     this.setState({ collapsed });
-    //   };
+   const [collapsed,setCollapsed]=useState(true) 
 
-    return <Layout style={{ minHeight: '100vh' }}>
-    <Sider collapsible >
+   const onCollapse = (collapsed)=>{
+    setCollapsed(collapsed);
+    console.log(collapsed);
+   }
+
+    return <Layout style={{ minHeight: '100vh', minWidth:'100px' }}>
+    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" />
-      <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+      <Menu theme="dark" mode="inline">
         <Menu.Item key="1" icon={<PieChartOutlined />}>
-          
+          Option 1
         </Menu.Item>
         <Menu.Item key="2" icon={<DesktopOutlined />}>
           Option 2
@@ -54,7 +52,6 @@ const SideBar = ()=>{
         </Menu.Item>
       </Menu>
     </Sider>
- 
   </Layout>
         
 

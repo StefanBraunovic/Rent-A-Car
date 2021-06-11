@@ -2,7 +2,11 @@ import React from 'react';
 
 
 const Home = ()=>{
-    return <div style={{textAlign:'center'}}>Welcome message page</div>
+    return <div style={{textAlign:'center'}}>
+        <h1>Welcome message page</h1>
+     
+    
+    </div>
 }
 
 export default Home;
