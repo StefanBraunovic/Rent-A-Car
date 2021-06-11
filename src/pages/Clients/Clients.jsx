@@ -1,37 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import { Table, Tag, Space } from 'antd';
 import { getAllClients } from '../../services/clients';
-import {
-    useQuery
-  } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 
 const Clients = ()=>{
 
-    const query = useQuery('clients', getAllClients)
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients', getAllClients, {
+        getNextPageParam: ((lastPage) => {
+            const currentPageNo = lastPage.data.current_page;
+            const totalPageNo = lastPage.data.last_page;
+            return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
+        }),
+    })
 
-    const Data =query.data?.data?.data
-    console.log(Data);
-    // console.log(query);
+    let tableData = [];
+    data?.pages.forEach((page) => {
+        tableData.push(...page.data.data);
+    })
     
-    useEffect((pageParams)=>{
-          var tableContent = document.querySelector('.ant-table-body')
-            tableContent.addEventListener('scroll', (event) => {
-              // checking whether a selector is well defined
-              console.log('yes, I am listening')
-              let maxScroll = event.target.scrollHeight - event.target.clientHeight
-              let currentScroll = event.target.scrollTop
-              if (currentScroll === maxScroll) {
-                getAllClients(pageParams=2)
-              }
-            })
+    useEffect((pageParams) => {
+        var tableContent = document.querySelector('.ant-table-body')
+        tableContent.addEventListener('scroll', (event) => {
+            // checking whether a selector is well defined
+            let maxScroll = event.target.scrollHeight - event.target.clientHeight;
+            let currentScroll = event.target.scrollTop;
+            if (currentScroll === maxScroll) {
+                fetchNextPage();
+            }
+        })
     })
        
       
-       
-        
-        
-        
-    const columns = [
+       const columns = [
         {
           title: 'Name',
           dataIndex: 'name',
@@ -79,13 +79,9 @@ const Clients = ()=>{
             ),
         },
     ];
-                
-
-
-
 
     return <div>
-       <Table columns={columns}   scroll={{ y: 400 }} dataSource={Data}  />
+       <Table columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
     </div>
 }
 
