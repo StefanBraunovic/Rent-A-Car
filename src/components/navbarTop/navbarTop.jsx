@@ -1,26 +1,28 @@
 import React from 'react';
-
 import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom';
 import { Menu,Dropdown,Button,Avatar, Col,Row } from 'antd';
+import uuid from 'react-uuid'
 import Title from 'antd/lib/typography'
-
 import logo from '../../images/logo.png';
 
 
 
-// const { Header} = Layout;
 const menu = (
   <Menu>
-   
+    <Menu.Item key={uuid()}>
     <Link to="/new_user">Add new user</Link>
-   
-   
-    <Link to="/new_vheicles">Add new vheicles</Link>
-   
-   
+    Add new user
+  </Menu.Item>
+    <Menu.Item key={uuid()}>
+   <Link to="/new_vehicles">Add new vheicles</Link>
+    </Menu.Item>
+    <Menu.Item key={uuid()}>
     <Link to="/new_reservations">Add new reservetions</Link>
-   
+    </Menu.Item>
+    <Menu.Item key={uuid()}>
+    <Link to="/new_reservations">Logout</Link>
+    </Menu.Item>
   </Menu>
 );
 
@@ -36,8 +38,6 @@ const NavbarTop = ()=>{
         <Button style={{float:'right', margin:'20px 0 0 1px'}}  >Menu</Button>
       </Dropdown></Col>
         </Row>
-     
-   
 }
 
 export default NavbarTop
