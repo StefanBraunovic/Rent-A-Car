@@ -1,10 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {Children, useEffect, useState} from 'react';
 import { Table, Tag, Space } from 'antd';
 import { getAllClients } from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
+import GetModal from '../../components/modal/Modal';
+import { Modal, Button } from 'antd';
+import Demo from './ClientsForm'
 
 const Clients = ()=>{
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [content, setContent] = useState('');
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients', getAllClients, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
@@ -17,8 +21,15 @@ const Clients = ()=>{
     data?.pages.forEach((page) => {
         tableData.push(...page.data.data);
     })
+  
+    const showModal = ()=>{
+      
+      setIsModalVisible(true);
+    
+    }
     
     useEffect((pageParams) => {
+    
         var tableContent = document.querySelector('.ant-table-body')
         tableContent.addEventListener('scroll', (event) => {
             // checking whether a selector is well defined
@@ -28,10 +39,10 @@ const Clients = ()=>{
                 fetchNextPage();
             }
         })
-    })
-       
-      
-       const columns = [
+     
+    },[])
+
+    const columns = [
         {
           title: 'Name',
           dataIndex: 'name',
@@ -73,15 +84,24 @@ const Clients = ()=>{
             key: 'action',
             render: () => (
               <Space size="middle">
-                <button>Delete</button>
-                <button>Edit</button>
+                <button onClick={() => { showModal(); setContent(
+                  <Demo title='obrisati'/>
+                );}} >Delete</button>
+                <button onClick={showModal}>Edit</button>
               </Space>
             ),
         },
     ];
 
     return <div>
-       <Table columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+      <Modal title="Basic Modal" visible={isModalVisible}>
+       {content}
+      </Modal>
+       <Table onRow={(record, rowIndex) => {
+    return {
+      onClick: event => {  setIsModalVisible(true)}, 
+    };
+  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
     </div>
 }
 
