@@ -1,8 +1,9 @@
-import { Form, Input, InputNumber, Button ,Select,message} from 'antd';
-import { useEffect, useState } from 'react';
-import { useQuery,useMutation,useQueryClient } from 'react-query';
-import {getAllCountries,deleteUser} from '../../services/clients'
-const { Option } = Select;
+import { Form, Input, InputNumber, Button ,message} from 'antd';
+import { useMutation,useQueryClient } from 'react-query';
+import {deleteVehicle} from '../../services/vehicles'
+
+
+
 const layout = {
   labelCol: {
     span: 8,
@@ -24,46 +25,32 @@ const validateMessages = {
 };
 
 
-const Demo = ({title}) => {
-  const onFinish = (values) => {
-    console.log(values);
-  };
+const VehiclesForm = ({title,id}) => {
   const queryClient = useQueryClient();
-  const mutation = useMutation((id) => deleteUser(id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('clients');
-      message.success('Deleted!');
-    },
-    onError: () => {
-      message.error('Nije izbrisano, vjerovatno jedan od ovih koji nemaju id');
-    },
-  });
-  const {data} = useQuery('countries',getAllCountries);
+  
+
+  const onSubmit = () => {
+       deleteVehicle(id)
+       .then((r)=>{
+           console.log(r);
+       })
+}
+//   const {data} = useQuery('countries',getAllCountries);
 if (title==='Delete'){
     return <div>
-        <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
+        <Form {...layout} name="nest-messages"  validateMessages={validateMessages}>
         <h1>{title}</h1>
-      <Form.Item
-        name={'name'}
-        label="First and Last name"
-        rules={[
-          {
-            type: 'name',
-          },
-        ]}
-      > 
-      <Input />
-      </Form.Item>
-     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button onClick={mutation} type="primary" htmlType="submit">
+    
+
+        <Button onClick={()=>onSubmit()} type="primary" htmlType="submit">
           Submit
         </Button>
-      </Form.Item>
+    
     </Form>
     </div>
 }
 return (
-      <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
+      <Form {...layout} name="nest-messages"  validateMessages={validateMessages}>
         <h1>{title}</h1>
       <Form.Item
         name={'name'}
@@ -83,12 +70,12 @@ return (
         
       >
           
-    <Select defaultValue='choose country' options={
+    {/* <Select defaultValue='choose country' options={
                 data?.data.map((country) => {
                   return { label: country.name, value: country.id };
                 }) || []
               } >
-     </Select>
+     </Select> */}
       </Form.Item>
       <Form.Item
         name={'identification_document_no'}
@@ -120,4 +107,4 @@ return (
   );
 };
 
-export default Demo;
+export default VehiclesForm;

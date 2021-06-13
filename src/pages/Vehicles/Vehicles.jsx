@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { Table, Tag, Space } from 'antd';
+import { Table, Tag, Space,Modal } from 'antd';
 import { getAllVehicles } from '../../services/vehicles';
 import { useInfiniteQuery } from 'react-query'
+import VehiclesForm from './VehiclesForm';
+import Item from 'antd/lib/list/Item';
 
 const Vehicles = ()=>{
-
+  const [content, setContent] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('vehicles', getAllVehicles, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
@@ -12,6 +15,13 @@ const Vehicles = ()=>{
             return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
         }),
     })
+
+    
+    const showModal = ()=>{
+      
+      setIsModalVisible(true);
+    
+    }
 
     let tableData = [];
     data?.pages.forEach((page) => {
@@ -70,23 +80,31 @@ const Vehicles = ()=>{
           {
             title: 'Action',
             key: 'action',
-            render: () => (
+            render: (record) => (
               <Space size="middle">
-                <button>Delete</button>
-                <button>Edit</button>
+                <button onClick={() => { showModal(); setContent(
+                  <VehiclesForm title='Delete' id={record.id}/>
+                );}} >Delete</button>
+               <button onClick={() => { showModal(); setContent(
+                  <VehiclesForm title='Edit'/>
+                );}} >Edit</button>
               </Space>
             ),
         },
     ];
 
     return <div>
+       <Modal title="Basic Modal" visible={isModalVisible}>
+       {content}
+      </Modal>
        <Table
+
        onRow={(record, rowIndex) => {
         return {
-          onClick: event => {console.log(record.id);}, // click row
+          onClick: event => {setIsModalVisible(true)}, // click row
         };
       }}
-       columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+       columns={columns} rowKey={(vehicle) => `vehicle-${vehicle.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
     </div>
 }
 

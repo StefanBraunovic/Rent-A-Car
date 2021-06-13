@@ -7,3 +7,11 @@ export const getAllVehicles = ({queryKey, pageParam = 1}) => {
     },
   });
 };
+
+export const deleteVehicle = id => {
+  return axiosInstance.delete(`vehicle-delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};

@@ -1,9 +1,9 @@
-import React, {Children, useEffect, useState} from 'react';
-import { Table, Tag, Space } from 'antd';
-import { getAllClients } from '../../services/clients';
+import React, { useEffect, useState} from 'react';
+import { Table, Space } from 'antd';
+import { getAllClients} from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
-import GetModal from '../../components/modal/Modal';
-import { Modal, Button } from 'antd';
+
+import { Modal} from 'antd';
 import Demo from './ClientsForm'
 
 const Clients = ()=>{
@@ -27,6 +27,8 @@ const Clients = ()=>{
       setIsModalVisible(true);
     
     }
+
+  
     
     useEffect((pageParams) => {
     
@@ -40,7 +42,7 @@ const Clients = ()=>{
             }
         })
      
-    },[])
+    })
 
     const columns = [
         {
@@ -50,7 +52,7 @@ const Clients = ()=>{
           
         },
         {
-          title: 'identification_document_noy',
+          title: 'identification_document_no',
           dataIndex: 'identification_document_no',
           key: 'identification_document_no',
         },
@@ -85,9 +87,11 @@ const Clients = ()=>{
             render: () => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <Demo title='obrisati'/>
+                  <Demo title='Delete'/>
                 );}} >Delete</button>
-                <button onClick={showModal}>Edit</button>
+               <button onClick={() => { showModal(); setContent(
+                  <Demo  title='Edit'/>
+                );}} >Edit</button>
               </Space>
             ),
         },
