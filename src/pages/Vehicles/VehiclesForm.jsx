@@ -1,8 +1,8 @@
-import { Form, Input, InputNumber, Button ,message} from 'antd';
+import { Form, Input, InputNumber, Button ,message,Select} from 'antd';
 import { useMutation,useQueryClient } from 'react-query';
 import {deleteVehicle} from '../../services/vehicles'
 
-
+const { Option } = Select;
 
 const layout = {
   labelCol: {
@@ -29,7 +29,7 @@ const VehiclesForm = ({title,id}) => {
   const queryClient = useQueryClient();
   
 
-  const onSubmit = () => {
+  const onDelete = () => {
        deleteVehicle(id)
        .then((r)=>{
            console.log(r);
@@ -42,7 +42,7 @@ if (title==='Delete'){
         <h1>{title}</h1>
     
 
-        <Button onClick={()=>onSubmit()} type="primary" htmlType="submit">
+        <Button onClick={()=>onDelete()} type="primary" htmlType="submit">
           Submit
         </Button>
     
@@ -53,47 +53,37 @@ return (
       <Form {...layout} name="nest-messages"  validateMessages={validateMessages}>
         <h1>{title}</h1>
       <Form.Item
-        name={'name'}
-        label="First and Last name"
-        rules={[
-          {
-            type: 'name',
-          },
-        ]}
+        name={'plate_no'}
+        label="Plates"
+     
       >
           
-        <Input />
+        <Input type='number'/>
       </Form.Item>
       <Form.Item
-        name={'country'}
-        label="country"
+        name={'production_year'}
+        label="Production Year"
         
       >
-          
-    {/* <Select defaultValue='choose country' options={
-                data?.data.map((country) => {
-                  return { label: country.name, value: country.id };
-                }) || []
-              } >
-     </Select> */}
+        <Input type='number'/>
       </Form.Item>
       <Form.Item
-        name={'identification_document_no'}
-        label="identification_document_no"
-        rules={[
-          {
-            type: 'number',
-            min: 0,
-            max: 99,
-          },
-        ]}
+        name={'car_type_id'}
+        label="Vehicle Type"
       >
-        <InputNumber />
+       <Select >
+        <Option>Small</Option>
+        <Option>Medium</Option>
+        <Option>Large</Option>
+       </Select>
       </Form.Item>
-      <Form.Item name={'phone_no'} label="phone_no">
+      <Form.Item name={'no_of_seats'} label="Seats">
         <Input />
       </Form.Item>
-      <Form.Item name={'email'} label="email">
+      <Form.Item name={'price_per_day'} label="Price/Day">
+        <Input />
+      </Form.Item>
+      <Form.Item name={'remarks'} label="Additional Remarks">
         <Input />
       </Form.Item>
      

@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { Table, Tag, Space,Modal } from 'antd';
+import { Table,  Space,Modal ,Button} from 'antd';
 import { getAllVehicles } from '../../services/vehicles';
 import { useInfiniteQuery } from 'react-query'
 import VehiclesForm from './VehiclesForm';
-import Item from 'antd/lib/list/Item';
 
 const Vehicles = ()=>{
   const [content, setContent] = useState('');
@@ -22,6 +21,10 @@ const Vehicles = ()=>{
       setIsModalVisible(true);
     
     }
+
+    const handleCancel = () => {
+      setIsModalVisible(false);
+    };
 
     let tableData = [];
     data?.pages.forEach((page) => {
@@ -94,7 +97,14 @@ const Vehicles = ()=>{
     ];
 
     return <div>
-       <Modal title="Basic Modal" visible={isModalVisible}>
+      <Button
+      onClick={() => { showModal(); setContent(
+        <VehiclesForm title='Add'/>
+      );}}
+      >add new vehicle</Button>
+      <Modal title="Basic Modal" visible={isModalVisible}>
+       {content}
+      </Modal>  <Modal title="Basic Modal" visible={isModalVisible} onCancel={handleCancel}>
        {content}
       </Modal>
        <Table
