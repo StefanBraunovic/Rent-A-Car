@@ -7,6 +7,7 @@ import Clients from './pages/Clients/Clients';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
 import Vehicles from './pages/Vehicles/Vehicles';
+import Reservations from './pages/Reservations/Reservations';
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,12 @@ function App() {
         <PrivateRoute path="/home" exact component={Home} isPrivate />
         <PrivateRoute path="/clients" exact component={Clients} isPrivate />
         <PrivateRoute path="/vehicles" exact component={Vehicles} isPrivate />
+        <PrivateRoute
+          path="/reservations"
+          exact
+          component={Reservations}
+          isPrivate
+        />
 
         <PrivateRoute path="/" component={LoginPage} />
       </Switch>

@@ -31,7 +31,10 @@ const SideBar = ()=>{
         <Link to="/clients">Clients</Link>
         </Menu.Item>
         <Menu.Item key={uuid()}icon={<DesktopOutlined />} >
-        <Link to="/vehicles">Clients</Link>
+        <Link to="/vehicles">Vehicles</Link>
+        </Menu.Item>
+        <Menu.Item key={uuid()}icon={<DesktopOutlined />} >
+        <Link to="/reservations">Reservations</Link>
         </Menu.Item>
    
       </Menu>

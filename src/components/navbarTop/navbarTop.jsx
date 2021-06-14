@@ -7,9 +7,6 @@ import Title from 'antd/lib/typography'
 import logo from '../../images/logo.png';
 import VehiclesForm from '../../pages/Vehicles/VehiclesForm';
 
-
-
-
 const NavbarTop = ()=>{
 
   const [isModalVisible, setIsModalVisible] = useState(false);

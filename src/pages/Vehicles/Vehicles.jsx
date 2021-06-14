@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import { Table,  Space,Modal ,Button} from 'antd';
+import { Table, Tag, Space,Modal,Button } from 'antd';
 import { getAllVehicles } from '../../services/vehicles';
 import { useInfiniteQuery } from 'react-query'
 import VehiclesForm from './VehiclesForm';
+import  './Vehicles.css'
 
-const Vehicles = ()=>{
+const Vehicles = ({onSubmit})=>{
   const [content, setContent] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  
     const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('vehicles', getAllVehicles, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
@@ -22,7 +24,12 @@ const Vehicles = ()=>{
     
     }
 
+    const handleOk=() =>{
+      setIsModalVisible(false);
+    }
+
     const handleCancel = () => {
+     
       setIsModalVisible(false);
     };
 
@@ -62,8 +69,8 @@ const Vehicles = ()=>{
         },
         {
           title: 'Vehicle Type',
-          dataIndex: 'car_type_id',
-          key: 'car_type_id',
+          dataIndex: ['car_type', 'name'],
+          key: 'type',
         },
         {
           title: 'Seats',
@@ -86,7 +93,7 @@ const Vehicles = ()=>{
             render: (record) => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <VehiclesForm title='Delete' id={record.id}/>
+                  <VehiclesForm title='Delete' id={record.id} />
                 );}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
                   <VehiclesForm title='Edit'/>
@@ -97,14 +104,13 @@ const Vehicles = ()=>{
     ];
 
     return <div>
-      <Button
+   <Button style={{border:'none'}}
       onClick={() => { showModal(); setContent(
-        <VehiclesForm title='Add'/>
-      );}}
+        <VehiclesForm title='Add new vehicle'/>
+      ); }}
       >add new vehicle</Button>
-      <Modal title="Basic Modal" visible={isModalVisible}>
-       {content}
-      </Modal>  <Modal title="Basic Modal" visible={isModalVisible} onCancel={handleCancel}>
+       <Modal title="Basic Modal" 
+        onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
        <Table

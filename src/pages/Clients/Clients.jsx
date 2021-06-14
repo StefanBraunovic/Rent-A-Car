@@ -2,7 +2,6 @@ import React, { useEffect, useState} from 'react';
 import { Table, Space } from 'antd';
 import { getAllClients} from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
-
 import { Modal} from 'antd';
 import Demo from './ClientsForm'
 

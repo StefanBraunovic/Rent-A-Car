@@ -15,3 +15,19 @@ export const deleteVehicle = id => {
     },
   });
 };
+
+export const getVehicleType = () => {
+  return axiosInstance.get(`car-types`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
+
+export const addVehicle = data => {
+  return axiosInstance.post(`vehicle`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
