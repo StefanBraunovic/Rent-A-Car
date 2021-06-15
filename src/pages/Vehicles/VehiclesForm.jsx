@@ -34,6 +34,7 @@ const VehiclesForm = ({title,id, visible}) => {
   };
   const methods = useForm();
   const { register, handleSubmit, watch, formState: { errors } } = methods;
+  const [fileList, setFileList] = useState([]);
   const onSubmit = (data)=>{
     addVehicle(data)
     console.log(data);
@@ -60,7 +61,7 @@ const steps = [
     <label htmlFor="plate_no">Vehicle Type</label>
     <select name='car_type_id' {...register("car_type_id")}>
     {data?.data?.data.map(car => {
-             return <option >{car.id}</option>
+             return <option value={car.id}>{car.name}</option>
               }) 
             }
     </select>
@@ -80,7 +81,7 @@ const steps = [
   },
   {
     title: 'Second',
-    content:   <ImageUploadForm/>,
+    content:   <ImageUploadForm  fileList={fileList}/>,
   },
 ];
 

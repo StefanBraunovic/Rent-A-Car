@@ -8,6 +8,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
 import Vehicles from './pages/Vehicles/Vehicles';
 import Reservations from './pages/Reservations/Reservations';
+import CreateReservations from './pages/Reservations/components/CreateReservations';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,12 @@ function App() {
           path="/reservations"
           exact
           component={Reservations}
+          isPrivate
+        />
+        <PrivateRoute
+          path="/add-reservations"
+          exact
+          component={CreateReservations}
           isPrivate
         />
 

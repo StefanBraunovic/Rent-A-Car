@@ -29,19 +29,12 @@ const Demo = ({title}) => {
     console.log(values);
   };
   const queryClient = useQueryClient();
-  const mutation = useMutation((id) => deleteUser(id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('clients');
-      message.success('Deleted!');
-    },
-    onError: () => {
-      message.error('Nije izbrisano, vjerovatno jedan od ovih koji nemaju id');
-    },
-  });
+ 
   const {data} = useQuery('countries',getAllCountries);
+  
 if (title==='Delete'){
     return <div>
-        <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
+        <Form {...layout} name="nest-messages"  validateMessages={validateMessages}>
         <h1>{title}</h1>
       <Form.Item
         name={'name'}
@@ -55,7 +48,7 @@ if (title==='Delete'){
       <Input />
       </Form.Item>
      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button onClick={mutation} type="primary" htmlType="submit">
+        <Button  type="primary" htmlType="submit">
           Submit
         </Button>
       </Form.Item>

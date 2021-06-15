@@ -31,3 +31,15 @@ export const addVehicle = data => {
     },
   });
 };
+
+export const getAvailableVehicles = (start_date, end_date, car_type) => {
+  let params = {};
+  params.car_type = car_type;
+  params.start_date = start_date ? start_date : '1900-01-01';
+  params.end_date = end_date ? end_date : '2100-01-01';
+
+  return axiosInstance.get('/cars-available', {
+    params: params,
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};

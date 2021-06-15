@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { Table, Space } from 'antd';
+import { Table, Space,Input } from 'antd';
 import { getAllClients} from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
@@ -7,8 +7,10 @@ import Demo from './ClientsForm'
 
 const Clients = ()=>{
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const searchTerm = '';
   const [content, setContent] = useState('');
-    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients', getAllClients, {
+  const[search,setSearch] = useState();
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(['clients',{ searchTerm }],getAllClients, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
             const totalPageNo = lastPage.data.last_page;
@@ -20,15 +22,14 @@ const Clients = ()=>{
     data?.pages.forEach((page) => {
         tableData.push(...page.data.data);
     })
+
+
   
     const showModal = ()=>{
       
       setIsModalVisible(true);
     
     }
-
-  
-    
     useEffect((pageParams) => {
     
         var tableContent = document.querySelector('.ant-table-body')
@@ -48,37 +49,44 @@ const Clients = ()=>{
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
+          responsive: ["lg"]
           
         },
         {
           title: 'identification_document_no',
           dataIndex: 'identification_document_no',
           key: 'identification_document_no',
+          responsive: ["sm"]
         },
         {
           title: 'phone_no',
           dataIndex: 'phone_no',
           key: 'phone_no',
+         responsive: ["sm"]
         },
         {
           title: 'Date of first reservation',
           key: 'date_of_first_reservation',
           dataIndex: 'date_of_first_reservation',
+         responsive: ["sm"]
         },
         {
             title: 'Date of last reservation',
             key: 'date_of_last_reservation',
             dataIndex: 'date_of_last_reservation',
+           responsive: ["sm"]
           },
           {
             title: 'Date of last reservation',
             key: 'date_of_last_reservation',
             dataIndex: 'date_of_last_reservation',
+           responsive: ["sm"]
           },
           {
             title: 'Remarks',
             key: 'remarks',
             dataIndex: 'remarks',
+           responsive: ["sm"]
           },
           {
             title: 'Action',
@@ -97,10 +105,12 @@ const Clients = ()=>{
     ];
 
     return <div>
+      
       <Modal title="Basic Modal" visible={isModalVisible}>
        {content}
       </Modal>
-       <Table onRow={(record, rowIndex) => {
+      <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
+       <Table  onRow={(record, rowIndex) => {
     return {
       onClick: event => {  setIsModalVisible(true)}, 
     };

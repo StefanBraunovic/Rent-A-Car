@@ -1,14 +1,16 @@
 import React, { useEffect, useState} from 'react';
-import { Table, Space } from 'antd';
-import { getAllClients} from '../../services/clients';
+import { Table, Space,Button } from 'antd';
+import { getAllClients, getAllReservations} from '../../services/reservations';
 import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
+import { useHistory } from 'react-router-dom';
 
 const Reservations = () =>{
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [content, setContent] = useState('');
-      const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients', getAllClients, {
+    const history = useHistory()
+      const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('reservations', getAllReservations, {
           getNextPageParam: ((lastPage) => {
               const currentPageNo = lastPage.data.current_page;
               const totalPageNo = lastPage.data.last_page;
@@ -26,10 +28,7 @@ const Reservations = () =>{
         setIsModalVisible(true);
       
       }
-  
-    
-      
-      useEffect((pageParams) => {
+  useEffect((pageParams) => {
       
           var tableContent = document.querySelector('.ant-table-body')
           tableContent.addEventListener('scroll', (event) => {
@@ -45,40 +44,40 @@ const Reservations = () =>{
   
       const columns = [
           {
-            title: 'Name',
-            dataIndex: 'name',
+            title: 'Client',
+            dataIndex: ['client', 'name'],
             key: 'name',
             
           },
           {
-            title: 'identification_document_no',
-            dataIndex: 'identification_document_no',
-            key: 'identification_document_no',
+            title: 'Vehicle',
+            dataIndex: ['vehicle', 'plate_no'],
+            key: 'country',
           },
           {
-            title: 'phone_no',
-            dataIndex: 'phone_no',
-            key: 'phone_no',
+            title: 'From',
+            dataIndex: 'from_date',
+            key: 'from_date',
           },
           {
-            title: 'Date of first reservation',
-            key: 'date_of_first_reservation',
-            dataIndex: 'date_of_first_reservation',
+            title: 'To',
+            key: 'to_date',
+            dataIndex: 'to_date',
           },
           {
-              title: 'Date of last reservation',
-              key: 'date_of_last_reservation',
-              dataIndex: 'date_of_last_reservation',
+              title: 'Location',
+              key: 'rent_location',
+              dataIndex:['rent_location', 'name'],
             },
             {
-              title: 'Date of last reservation',
-              key: 'date_of_last_reservation',
-              dataIndex: 'date_of_last_reservation',
+              title: 'Return location',
+              key: 'return_location',
+              dataIndex: ['return_location', 'name'],
             },
             {
-              title: 'Remarks',
-              key: 'remarks',
-              dataIndex: 'remarks',
+              title: 'Total Price $',
+              key: 'total_price',
+              dataIndex: 'total_price',
             },
             {
               title: 'Action',
@@ -97,6 +96,9 @@ const Reservations = () =>{
       ];
   
       return <div>
+        <Button className="dashed" onClick={()=>{
+          history.push('/add-reservations')
+          }}>add reservations</Button>
         <Modal title="Basic Modal" visible={isModalVisible}>
          {content}
         </Modal>

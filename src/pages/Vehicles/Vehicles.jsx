@@ -3,7 +3,7 @@ import { Table, Tag, Space,Modal,Button } from 'antd';
 import { getAllVehicles } from '../../services/vehicles';
 import { useInfiniteQuery } from 'react-query'
 import VehiclesForm from './VehiclesForm';
-import  './Vehicles.css'
+import style from './Vehicles.module.css'
 
 const Vehicles = ({onSubmit})=>{
   const [content, setContent] = useState('');
@@ -110,6 +110,7 @@ const Vehicles = ({onSubmit})=>{
       ); }}
       >add new vehicle</Button>
        <Modal title="Basic Modal" 
+       
         onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
