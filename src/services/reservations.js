@@ -7,3 +7,15 @@ export const getAllReservations = ({queryKey, pageParam = 1}) => {
     },
   });
 };
+
+export const createReservation = data => {
+  return axiosInstance.post('/reservation-store', data, {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};
+
+export const getLocations = () => {
+  return axiosInstance.get('/locations', {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};

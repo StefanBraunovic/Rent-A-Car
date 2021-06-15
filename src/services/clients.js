@@ -12,6 +12,17 @@ export const getAllClients = ({queryKey, pageParam = 1}) => {
   });
 };
 
+export const getClients = (search, page) => {
+  let params = {};
+  if (search) params.search = search;
+  if (page) params.page = page;
+
+  return axiosInstance.get('/clients', {
+    params: params,
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};
+
 // api/countries
 
 export const getAllCountries = () => {

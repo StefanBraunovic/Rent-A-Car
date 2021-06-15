@@ -4,11 +4,9 @@ import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 // import {yupResolver} from "@hookform/resolvers/yup";
 // import * as yup from "yup";
-// import CreateModal from "./components/createModal/CreateModal";
+import CreateModal from "./createModal/CreateModal";
 import {useQuery, useQueryClient} from "react-query";
 import {getAvailableVehicles, getVehicleType} from "../../../services/vehicles";
-// import {insertKey} from "../../functions/tools";
-// import {CAR_TYPES} from "../../constants/config";
 import moment from "moment";
 
 // const schema = yup.object().shape({
@@ -46,13 +44,11 @@ const CreateReservations = ()=>{
    console.log(CAR_TYPES);
 
 
-       
-
-    const onRowClick = (record) => {
+       const onRowClick = (record) => {
         return {
             onClick: () => {
-                console.log(record); //record.id
-                setOpenModal({open:true,title:'Kreiraj rezervaciju',id:record.id,data:record});
+                console.log(record.plate_no); //record.id
+                setOpenModal({open:true,title:'Create reservations',id:record.id,data:record});
             }
         };
     }
@@ -115,13 +111,13 @@ const CreateReservations = ()=>{
                 <Button style={{paddingTop:2,pointerEvents:"none"}}  icon={<FilterOutlined />} />
             </div>
 
-            {/* <CreateModal
+            <CreateModal
                 openModal={openModal}
                 setOpenModal={setOpenModal}
                 title={openModal.title}
                 form={{errors:errors,handleSubmit:handleSubmit,control:control,reset:reset}}
                 queryClient={queryClient}
-            /> */}
+            />
         </Space>
         <Table onRow={onRowClick}
                columns={columns}
