@@ -1,5 +1,5 @@
 import {Table, Space, Button, Input, DatePicker, message, Select} from 'antd';
-import {PlusSquareOutlined, SearchOutlined,FilterOutlined} from '@ant-design/icons';
+import {FilterOutlined} from '@ant-design/icons';
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 // import {yupResolver} from "@hookform/resolvers/yup";
@@ -8,16 +8,6 @@ import CreateModal from "./createModal/CreateModal";
 import {useQuery, useQueryClient} from "react-query";
 import {getAvailableVehicles, getVehicleType} from "../../../services/vehicles";
 import moment from "moment";
-
-// const schema = yup.object().shape({
-//     to_date: yup.date().required(),
-//     from_date: yup.date().required(),
-//     rent_location_id:yup.number().integer().required(),
-//     return_location_id:yup.number().integer().required(),
-//     total_price:yup.number().required(),
-//     vehicle_id:yup.number().integer().required(),
-//     client_id:yup.number().integer().required()
-// });
 
 const CreateReservations = ()=>{
 

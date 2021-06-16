@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { Table, Space,Input } from 'antd';
+import { Table, Space,Input,Button } from 'antd';
 import { getAllClients} from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
@@ -7,10 +7,10 @@ import Demo from './ClientsForm'
 
 const Clients = ()=>{
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const searchTerm = '';
+  
   const [content, setContent] = useState('');
   const[search,setSearch] = useState();
-    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(['clients',{ searchTerm }],getAllClients, {
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients',getAllClients, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
             const totalPageNo = lastPage.data.last_page;
@@ -23,13 +23,13 @@ const Clients = ()=>{
         tableData.push(...page.data.data);
     })
 
-
+          const showModal = ()=>{
+          setIsModalVisible(true);
+        }
+    const handleCancel = () => {
+      setIsModalVisible(false);
+        };
   
-    const showModal = ()=>{
-      
-      setIsModalVisible(true);
-    
-    }
     useEffect((pageParams) => {
     
         var tableContent = document.querySelector('.ant-table-body')
@@ -77,12 +77,6 @@ const Clients = ()=>{
            responsive: ["sm"]
           },
           {
-            title: 'Date of last reservation',
-            key: 'date_of_last_reservation',
-            dataIndex: 'date_of_last_reservation',
-           responsive: ["sm"]
-          },
-          {
             title: 'Remarks',
             key: 'remarks',
             dataIndex: 'remarks',
@@ -91,13 +85,13 @@ const Clients = ()=>{
           {
             title: 'Action',
             key: 'action',
-            render: () => (
+            render: (record) => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <Demo title='Delete'/>
+                  <Demo title='Delete' id={record.id}/>
                 );}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
-                  <Demo  title='Edit'/>
+                  <Demo  title='Edit' id={record.id}/>
                 );}} >Edit</button>
               </Space>
             ),
@@ -105,8 +99,13 @@ const Clients = ()=>{
     ];
 
     return <div>
+      <Button style={{border:'none'}}
+      onClick={() => { showModal(); setContent(
+        <Demo title='Add new client'/>
+      ); }}
+      >add new client</Button>
       
-      <Modal title="Basic Modal" visible={isModalVisible}>
+      <Modal title="Basic Modal"     onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />

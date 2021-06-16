@@ -1,13 +1,9 @@
 import axiosInstance from './axios';
 
-export const getAllClients = ({queryKey, pageParam = 1}) => {
-  const {searchTerm} = queryKey[1];
+export const getAllClients = ({pageParam = 1}) => {
   return axiosInstance.get('clients?page=' + pageParam, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
-    },
-    params: {
-      search: searchTerm,
     },
   });
 };
@@ -23,7 +19,13 @@ export const getClients = (search, page) => {
   });
 };
 
-// api/countries
+export const getUser = userId => {
+  return axiosInstance.get(`user-show/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
 
 export const getAllCountries = () => {
   return axiosInstance.get('countries', {
@@ -34,7 +36,23 @@ export const getAllCountries = () => {
 };
 
 export const deleteUser = id => {
-  return axiosInstance.get(`user-delete/${id}`, {
+  return axiosInstance.delete(`user-delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
+
+export const updateClient = (data, id) => {
+  return axiosInstance.post(`/user-update/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  });
+};
+
+export const createClient = data => {
+  return axiosInstance.post('/user-store', data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
     },

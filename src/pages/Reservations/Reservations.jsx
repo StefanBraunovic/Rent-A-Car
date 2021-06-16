@@ -1,7 +1,9 @@
 import React, { useEffect, useState} from 'react';
-import { Table, Space,Button } from 'antd';
-import { getAllClients, getAllReservations} from '../../services/reservations';
-import { useInfiniteQuery } from 'react-query'
+import { Table, Space,Button,DatePicker } from 'antd';
+import {SearchOutlined } from '@ant-design/icons';
+// import { getAllClients} from '../../services/clients';
+import { getReservations, getAllReservations} from '../../services/reservations';
+import { useInfiniteQuery,useQuery } from 'react-query'
 import { Modal} from 'antd';
 import { useHistory } from 'react-router-dom';
 
@@ -10,6 +12,8 @@ const Reservations = () =>{
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [content, setContent] = useState('');
     const history = useHistory()
+    const[isSearching,setIsSearching] = useState(false);
+    const[search,setSearch] = useState('');
       const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('reservations', getAllReservations, {
           getNextPageParam: ((lastPage) => {
               const currentPageNo = lastPage.data.current_page;
@@ -17,6 +21,7 @@ const Reservations = () =>{
               return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
           }),
       })
+      // const { isLoading, isError, reservationData, error } = useQuery(['reservations', ()=>getReservations(search));
   
       let tableData = [];
       data?.pages.forEach((page) => {
@@ -102,6 +107,17 @@ const Reservations = () =>{
         <Modal title="Basic Modal" visible={isModalVisible}>
          {content}
         </Modal>
+        <div>
+                <DatePicker.RangePicker onChange={(e)=>{
+                    if(e) {
+                        console.log(e[0]._d)
+                        setIsSearching(true);
+                    }else{
+                        setIsSearching(false);
+                    }
+                }} />
+                <Button style={{paddingTop:2,pointerEvents:"none"}}  loading={isSearching} icon={<SearchOutlined />} />
+            </div>
          <Table onRow={(record, rowIndex) => {
       return {
         onClick: event => {  setIsModalVisible(true)}, 

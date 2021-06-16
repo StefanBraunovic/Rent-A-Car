@@ -6,6 +6,7 @@ import uuid from 'react-uuid'
 import Title from 'antd/lib/typography'
 import logo from '../../images/logo.png';
 import VehiclesForm from '../../pages/Vehicles/VehiclesForm';
+import ClientsForm from '../../pages/Clients/ClientsForm'
 
 const NavbarTop = ()=>{
 
@@ -36,7 +37,11 @@ const NavbarTop = ()=>{
       >add new vehicle</Button>
     </Menu.Item>
       <Menu.Item key={uuid()}>
-     <Link to="/new_vehicles">Add new vheicles</Link>
+      <Button style={{border:'none'}}
+      onClick={() => { showModal(); setContent(
+        <ClientsForm title='Add new client'/>
+      ); }}
+      >add new client</Button>
       </Menu.Item>
       <Menu.Item key={uuid()}>
       <Link to="/new_reservations">Add new reservetions</Link>

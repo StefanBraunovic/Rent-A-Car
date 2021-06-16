@@ -19,3 +19,14 @@ export const getLocations = () => {
     headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
   });
 };
+
+export const getReservations = (search, page) => {
+  let params = {};
+  if (search) params.search = search;
+  if (page) params.page = page;
+
+  return axiosInstance.get('/reservations', {
+    params: params,
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};

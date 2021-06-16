@@ -4,9 +4,11 @@ import {SaveOutlined} from "@ant-design/icons";
 import CreateForm from "../createForm/CreateForm";
 import moment from "moment";
 import {createReservation} from "../../../../services/reservations";
+import { useHistory } from 'react-router-dom';
 
 const CreateModal = ({openModal,setOpenModal,title,form:{control,errors,handleSubmit,reset},queryClient}) => {
     const [isLoading,setIsLoading] = useState(false);
+    const history= useHistory();
 
     const handleCancel = () => {
         if(isLoading === false)
@@ -33,7 +35,7 @@ const CreateModal = ({openModal,setOpenModal,title,form:{control,errors,handleSu
         createReservation(formData).then(res=>{
             queryClient.invalidateQueries('cars-available');
             message.success(res?.statusText);
-            setIsLoading(false);
+            history.push('/reservations')
             setOpenModal({});
         }).catch(err=>{
             message.error(err?.response?.statusText);
@@ -43,11 +45,11 @@ const CreateModal = ({openModal,setOpenModal,title,form:{control,errors,handleSu
 
     const footer =  [
         <Button disabled={isLoading} className="login-form-button" key='cancel' onClick={handleCancel}>
-            Odustani
+            Cancel 
         </Button>,
 
-        <Button loading={isLoading} type="primary" key="ok" form="create-reservation-form" icon={<SaveOutlined />} htmlType="submit" className="login-form-button">
-            Sacuvaj
+        <Button  loading={isLoading} type="primary" key="ok" form="create-reservation-form" icon={<SaveOutlined />} htmlType="submit" className="login-form-button">
+            Save
         </Button>
     ];
 

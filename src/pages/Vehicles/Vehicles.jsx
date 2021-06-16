@@ -94,7 +94,7 @@ const Vehicles = ({onSubmit})=>{
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
                   <VehiclesForm title='Delete' id={record.id} />
-                );}} >Delete</button>
+                ); ;}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
                   <VehiclesForm title='Edit'/>
                 );}} >Edit</button>
