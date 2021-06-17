@@ -5,7 +5,9 @@ import wheel from '../../images/car-animation/wheel.png';
 import logo from '../../images/logo.png';
 import {useHistory} from 'react-router-dom';
 // import axios from 'axios';
-import {Login} from '../../services/account'
+import {Login,me} from '../../services/account'
+import { saveAuth } from '../../functions/helper';
+import {ROLES} from "../../constants/constants";
 
 const LoginPage = ()=>{
 
@@ -23,17 +25,31 @@ const LoginPage = ()=>{
         console.log(loginData);
         Login(loginData)
         .then(function(response){
-            console.log(response);
-            console.log(response?.data['access_token']);
+            let token =  response?.data?.access_token;
+            if(token){
+                me(token).then(res=>{
+                    saveAuth({
+                        name:res?.data?.name,
+                      role:res?.data?.role_id === 1? ROLES.EMPLOYEE:ROLES.CLIENT,
+                      token:token
+                    })
+                    history.push('/home')
+                })
+            }
+         
             localStorage.setItem('jwt-token', response?.data['access_token'])
-            // localStorage.setItem('role', response?.data['access_token'])
-            history.push('/home')
+          
         })
         .catch(function(error){
             console.log(error?.response.data?.error);
             if(error?.response?.data?.error === 'Unauthorized'){
                 setErrorMessage('Pogresni kredencijali')
             }
+        })
+        me()
+        .then(function(r){
+            // console.log(r?.data.data);
+            localStorage.setItem('role', r?.data?.role_id)
         })
     }
 
