@@ -4,6 +4,7 @@ import { getAllClients} from '../../services/clients';
 import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
 import Demo from './ClientsForm'
+import style from  './Clients.module.css'
 
 const Clients = ()=>{
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -49,38 +50,38 @@ const Clients = ()=>{
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
-          responsive: ["lg"]
           
+         
         },
         {
           title: 'identification_document_no',
           dataIndex: 'identification_document_no',
           key: 'identification_document_no',
-          responsive: ["sm"]
+        
         },
         {
           title: 'phone_no',
           dataIndex: 'phone_no',
           key: 'phone_no',
-         responsive: ["sm"]
+       
         },
         {
           title: 'Date of first reservation',
           key: 'date_of_first_reservation',
           dataIndex: 'date_of_first_reservation',
-         responsive: ["sm"]
+       
         },
         {
             title: 'Date of last reservation',
             key: 'date_of_last_reservation',
             dataIndex: 'date_of_last_reservation',
-           responsive: ["sm"]
+         
           },
           {
             title: 'Remarks',
             key: 'remarks',
             dataIndex: 'remarks',
-           responsive: ["sm"]
+         
           },
           {
             title: 'Action',
@@ -109,12 +110,16 @@ const Clients = ()=>{
        {content}
       </Modal>
       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
-       <Table  onRow={(record, rowIndex) => {
+      
+   
+      <Table   onRow={(record, rowIndex) => {
     return {
       onClick: event => {  setIsModalVisible(true)}, 
     };
-  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
-    </div>
+  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 ,x:true  }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+      </div>
+     
+ 
 }
 
 export default Clients;

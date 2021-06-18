@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup  from 'yup';
-
 import style from '../login/Login.module.css'
 import Car from '../../images/car-animation/car.png';
 import wheel from '../../images/car-animation/wheel.png';
 import logo from '../../images/logo.png';
 import {useHistory} from 'react-router-dom';
-// import axios from 'axios';
 import {Login,me} from '../../services/account'
 import { saveAuth } from '../../functions/helper';
 import {ROLES} from "../../constants/constants";
@@ -37,9 +35,10 @@ const LoginPage = ()=>{
        console.log(data);
         Login(data)
         .then(function(response){
+            localStorage.setItem('jwt-token', response?.data['access_token'])
             let token =  response?.data?.access_token;
-            if(token){
-                me(token).then(res=>{
+            me(token).then(res=>{
+                localStorage.setItem('role', response?.data?.role_id)
                     saveAuth({
                         name:res?.data?.name,
                       role:res?.data?.role_id === 1? ROLES.EMPLOYEE:ROLES.CLIENT,
@@ -47,16 +46,7 @@ const LoginPage = ()=>{
                     })
                     history.push('/home')
                 })
-            }
-         
-            localStorage.setItem('jwt-token', response?.data['access_token'])
-            me()
-            .then(function(r){
-
-                localStorage.setItem('role', r?.data?.role_id)
-            })
-          
-        })
+                 })
         .catch(function(error){
             console.log(error?.response.data?.error);
             if(error?.response?.data?.error === 'Unauthorized'){

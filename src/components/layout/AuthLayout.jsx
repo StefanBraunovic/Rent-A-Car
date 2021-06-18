@@ -9,8 +9,8 @@ const AuthLayout = ({children}) => {
     return <Layout >
         <Header ><NavbarTop/></Header>
       <Layout >
-      <Sider><SiderDemo/></Sider>
-        <Content style={{marginRight:'100px'}}>{children}</Content>
+      <SiderDemo/>
+        <Content style={{padding:'40px'}} >{children}</Content>
       </Layout>
         <Footer style={{textAlign:'center'}}>Footer</Footer>
     </Layout>

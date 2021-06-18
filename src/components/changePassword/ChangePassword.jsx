@@ -1,26 +1,26 @@
 import {useEffect, useState} from "react";
 import {Modal, Button,Form} from 'antd';
 import {KeyOutlined, SaveOutlined} from "@ant-design/icons";
-// import * as yup from "yup";
+import * as yup from "yup";
 import {useForm} from "react-hook-form";
-// import {yupResolver} from "@hookform/resolvers/yup";
+import {yupResolver} from "@hookform/resolvers/yup";
 import FormInput from "../formInput/FormInput";
 import {changePassword} from "../../services/account";
 
 
-// const password_roules = yup.string()
-//     .required('required')
-//     .min(4, 'Password is too short - should be 4 chars minimum.')
-//     .max(12,'Password is too long - should be 12 chars maximum.')
-//     .matches(/^[a-zA-Z0-9!#%&]*$/g, 'Password can only contain Latin letters, numbers and chars(!,#,%,&)')
+const password_roules = yup.string()
+    .required('required')
+    .min(4, 'Password is too short - should be 4 chars minimum.')
+    .max(12,'Password is too long - should be 12 chars maximum.')
+    .matches(/^[a-zA-Z0-9!#%&]*$/g, 'Password can only contain Latin letters, numbers and chars(!,#,%,&)')
 
-// const schema = yup.object().shape({
-//     old_password: password_roules,
-//     new_password:password_roules,
-//     confirm_password: yup.string()
-//         .oneOf([yup.ref('new_password'), null], 'Passwords must match')
+const schema = yup.object().shape({
+    old_password: password_roules,
+    new_password:password_roules,
+    confirm_password: yup.string()
+        .oneOf([yup.ref('new_password'), null], 'Passwords must match')
 
-// });
+});
 
 const ChangePassword = () => {
     const[openModal,setOpenModal] = useState(false);
@@ -28,7 +28,7 @@ const ChangePassword = () => {
     const {formState: { errors }, handleSubmit, control,reset} = useForm({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
-        // resolver: yupResolver(schema),
+        resolver: yupResolver(schema),
         defaultValues:{
             email:'',
             password:'',

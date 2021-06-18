@@ -1,9 +1,12 @@
 import { Form, Input, InputNumber, Button ,Select,message} from 'antd';
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup  from 'yup';
 import { useEffect, useState } from 'react';
 import { useQuery,useMutation,useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import {getAllCountries,deleteUser,createClient, getUser} from '../../services/clients'
-import {useForm} from 'react-hook-form';
+
 const { Option } = Select;
 const { TextArea } = Input;
 const layout = {
@@ -20,18 +23,43 @@ const initialData = {
   identification_document_no:0,
   phone_no:'',
   country_id:0,
-
-
 }
 
+
+const schema = yup.object().shape({
+  name:yup.string().required(),
+  email: yup.string().email().required(),
+  country_id: yup.number().required(),
+  identification_document_no:yup.number().required(),
+  phone_no:yup.string().required()
+  
+  
+  // password: yup.string()
+  //     .required('required')
+  //     .min(4, 'Password is too short - should be 4 chars minimum.')
+  //     .max(12,'Password is too long - should be 12 chars maximum.')
+  //     .matches(/^[a-zA-Z0-9!#%&]*$/g, 'Password can only contain Latin letters, numbers and chars(!,#,%,&)')
+})
+
+
 const Demo = ({title,id}) => {
-const [formData,setFormData] = useState(initialData);
-const history = useHistory();
-const queryClient = useQueryClient(initialData);
+
+  const { handleSubmit, control, reset,setValue, formState:{ errors } } = useForm(
  
-const {data} = useQuery('countries',getAllCountries);
+    {  resolver: yupResolver(schema)}
+  );
+  
+  const [formData,setFormData] = useState(initialData);
+  const history = useHistory();
+  const queryClient = useQueryClient(initialData);
+  
+  const {data} = useQuery('countries',getAllCountries);
+  
+ 
 
   const onFinish = (data) => {
+
+    console.log(data);
     if(title==='Add new client'){
       createClient(data)
       .then((r)=>{
@@ -48,7 +76,7 @@ const {data} = useQuery('countries',getAllCountries);
   };
 
   const onDelete = () => {
-    console.log(id);
+    // console.log(id);
     deleteUser(id)
     .then((r)=>{
         console.log(r);
@@ -57,14 +85,17 @@ const {data} = useQuery('countries',getAllCountries);
 }
 
 useEffect(()=>{
-if(title!== 'Add new client'){
+if(title==='Edit'){
 getUser(id)
 .then(r=>{
-  setFormData(r?.data)
-    })
-  }
-  console.log(formData);
-},[id])
+  setFormData(r?.data?.client)
+  console.log(r?.data?.client);
+  const fields = ['name','email','country_id','identification_document_no','phone_no'];
+  fields.map((field) => setValue(field, formData[field]));
+  
+    })}
+    
+ },[])
 
  
 
@@ -72,7 +103,7 @@ getUser(id)
   
 if (title==='Delete'){
     return <div>
-        <Form {...layout} name="nest-messages"  >
+       
           <div><h3>Are you sure to delete {formData.name}?</h3>
           </div>
      
@@ -80,66 +111,114 @@ if (title==='Delete'){
           Delete
         </Button>
 
-    </Form>
     </div>
 }
-return (
-      <Form {...layout}  onFinish={onFinish}>
-      <h3>Edit {formData.name}</h3>
- <Form.Item
-        name={'name'}
-        label="First and Last name"
-     type='text'
-     value={formData?.name}
-     onChange={(e)=> setFormData(prevState=>{
-       return {
-         ...prevState,
-         name:e.target.value
-       }
-     })}
-     
-      >
-          <Input value={formData.name} />
-  </Form.Item>
-  <Form.Item      value={formData?.email} name={'email'} label="email">
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={'identification_document_no'}
-        label="identification_document_no"
-       type="number"
-      //  value={formData?.identification_document_no}
-      >
-        <InputNumber     value='2' />
-      </Form.Item>
-      
-      <Form.Item   value={formData?.phone_no} name={'phone_no'} label="phone_no">
-        <Input />
-      </Form.Item>
-     
-      <Form.Item
-        name={'country_id'}
-        label="country"
-        value={formData?.identification_document_no}
-      >
-          
-    <Select defaultValue='choose country' options={
-                data?.data.map((country) => {
-                  return { label: country.name, value: country.id };
-                }) || []
-              } >
-     </Select>
-      </Form.Item>
-
-      <Form.Item   name={'remarks'} label="Remarks" >
-        <Input rows={4} />
-      </Form.Item>
+return ( 
+<Form onFinish={handleSubmit(onFinish) }>
   
-   <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button  type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
+  <Form.Item
+  
+  span={6}
+  label='First and Last name'
+  htmlFor='name'
+  required={true}
+  >
+  <Controller
+  
+        name="name"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <Input 
+       {...field} />}
+      />
+<p style={{color:'red'}}>{errors.name?.type === 'required' && 'This field is required'}
+</p>
+  </Form.Item>
+    <Form.Item
+  label='Email'
+  htmlFor='email'
+  required={true}
+ 
+   >
+  <Controller
+        name="email"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <Input  {...field} />}
+      />
+<p style={{color:'red'}}>{errors.email?.type === 'email' && 'Please enter a valid email' }</p>
+<p style={{color:'red'}}>{errors.email?.type === 'required' && 'This field is required' }</p>
+  </Form.Item>
+  <Form.Item
+        
+        label="Country"
+        required={true}
+      
+      >
+  <Controller
+        name="country_id"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) =>     <Select defaultValue='choose country' options={
+          data?.data.map((country) => {
+            return { label: country.name, value: country.id };
+          }) || []
+        }  {...field} />
+}/>
+<p style={{color:'red'}}>{errors.country_id?.type === 'required' && 'Please select a country' }</p>
+          </Form.Item>
+          <Form.Item
+  label='ID or Passport'
+  htmlFor='identification_document_no'
+  required={true}
+  
+
+   >
+  <Controller
+        name="identification_document_no"
+        control={control}
+        
+        rules={{ required: true}}
+        render={({ field }) => <Input  {...field} />}
+      />
+<p style={{color:'red'}}>{errors.identification_document_no?.type === 'required' && 'This field is required' }</p>
+{/* <p style={{color:'red'}}>{errors.identification_document_no?.type === 'required' && 'This field is required' }</p> */}
+  </Form.Item>
+  <Form.Item
+  label='Phone'
+  htmlFor='phone_no'
+  required={true}
+  
+ 
+   >
+  <Controller
+        name="phone_no"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <Input  {...field} />}
+      />
+<p style={{color:'red'}}>{errors.phone_no?.type === 'required' && 'This field is required' }</p>
+
+  </Form.Item>
+
+  <Form.Item
+  label='Remarks'
+  htmlFor='remarks'
+  required={true}
+  
+ 
+   >
+  <Controller
+        name="remarks"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <TextArea  {...field} />}
+      />
+<p style={{color:'red'}}>{errors.phone_no?.type === 'required' && 'This field is required' }</p>
+
+  </Form.Item>
+  
+      <input type="submit" />
     </Form>
   );
 };
