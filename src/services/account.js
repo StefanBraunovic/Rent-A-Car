@@ -15,7 +15,7 @@ export const me = token => {
     '/auth/me',
     {},
     {
-      headers: {Authorization: 'Bearer' + token},
+      headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
     },
   );
 };

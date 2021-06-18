@@ -11,6 +11,7 @@ const PrivateRoute = ({component: Component, isPrivate,path, ...rest}) => {
     const Layout = isPrivate ? auth()?.role === "Employee"?AuthLayout:ClientLayout : BasicLayout;
 
 	if(path === '/')Component = (auth()?.role === "Employee")?AuthLayout:ClientHome;
+
     return <Route {...rest} component={() => {
         return isPrivate ? localStorage.getItem('jwt-token') ?
             <Layout><Component {...rest}/></Layout>

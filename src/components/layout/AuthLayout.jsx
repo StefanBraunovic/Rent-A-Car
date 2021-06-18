@@ -6,9 +6,9 @@ import {  Layout } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 
 const AuthLayout = ({children}) => {
-    return <Layout>
-        <Header><NavbarTop/></Header>
-      <Layout>
+    return <Layout >
+        <Header ><NavbarTop/></Header>
+      <Layout >
       <Sider><SiderDemo/></Sider>
         <Content style={{marginRight:'100px'}}>{children}</Content>
       </Layout>

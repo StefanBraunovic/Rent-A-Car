@@ -22,7 +22,7 @@ const LoginPage = ()=>{
 
     const onSubmit = () =>{
        
-        console.log(loginData);
+        // console.log(loginData);
         Login(loginData)
         .then(function(response){
             let token =  response?.data?.access_token;
@@ -38,6 +38,11 @@ const LoginPage = ()=>{
             }
          
             localStorage.setItem('jwt-token', response?.data['access_token'])
+            me()
+            .then(function(r){
+
+                localStorage.setItem('role', r?.data?.role_id)
+            })
           
         })
         .catch(function(error){
@@ -46,11 +51,7 @@ const LoginPage = ()=>{
                 setErrorMessage('Pogresni kredencijali')
             }
         })
-        me()
-        .then(function(r){
-            // console.log(r?.data.data);
-            localStorage.setItem('role', r?.data?.role_id)
-        })
+   
     }
 
     return <div className={style.hero}>

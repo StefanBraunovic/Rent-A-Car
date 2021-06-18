@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { useQuery,useMutation,useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import {getAllCountries,deleteUser,createClient, getUser} from '../../services/clients'
+import {useForm} from 'react-hook-form';
 const { Option } = Select;
+const { TextArea } = Input;
 const layout = {
   labelCol: {
     span: 8,
@@ -22,9 +24,8 @@ const initialData = {
 
 }
 
-
 const Demo = ({title,id}) => {
-const [formData,setFormData] = useState();
+const [formData,setFormData] = useState(initialData);
 const history = useHistory();
 const queryClient = useQueryClient(initialData);
  
@@ -72,20 +73,20 @@ getUser(id)
 if (title==='Delete'){
     return <div>
         <Form {...layout} name="nest-messages"  >
-        <h1>{title}</h1>
-      
-     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <div><h3>Are you sure to delete {formData.name}?</h3>
+          </div>
+     
      <Button style={{display:'block'}} onClick={()=>onDelete()} type="primary" htmlType="submit">
           Delete
         </Button>
-      </Form.Item>
+
     </Form>
     </div>
 }
 return (
       <Form {...layout}  onFinish={onFinish}>
-        <h1>{title}</h1>
-      <Form.Item
+      <h3>Edit {formData.name}</h3>
+ <Form.Item
         name={'name'}
         label="First and Last name"
      type='text'
@@ -96,8 +97,9 @@ return (
          name:e.target.value
        }
      })}
+     
       >
-          <Input />
+          <Input value={formData.name} />
   </Form.Item>
   <Form.Item      value={formData?.email} name={'email'} label="email">
         <Input />
@@ -106,9 +108,9 @@ return (
         name={'identification_document_no'}
         label="identification_document_no"
        type="number"
-       value={formData?.identification_document_no}
+      //  value={formData?.identification_document_no}
       >
-        <InputNumber  />
+        <InputNumber     value='2' />
       </Form.Item>
       
       <Form.Item   value={formData?.phone_no} name={'phone_no'} label="phone_no">
@@ -128,8 +130,12 @@ return (
               } >
      </Select>
       </Form.Item>
-   
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+
+      <Form.Item   name={'remarks'} label="Remarks" >
+        <Input rows={4} />
+      </Form.Item>
+  
+   <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button  type="primary" htmlType="submit">
           Submit
         </Button>
