@@ -4,7 +4,7 @@ export const ROLES = {
   ANY: 'Any',
 };
 
-export const STATUS_COLOR = {
+export const COLOR = {
   1: 'RED',
   2: 'GREEN',
   3: 'YELLOW',

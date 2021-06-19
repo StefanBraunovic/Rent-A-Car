@@ -35,3 +35,16 @@ export const saveAuth = user => {
     }),
   );
 };
+
+export const concatData = data => {
+  let arrData = [];
+  let pages = data?.pages;
+  if (pages) {
+    pages.forEach(e => {
+      if (e.items) {
+        arrData[e?.page - 1] = e.items;
+      }
+    });
+  }
+  return [].concat.apply([], arrData);
+};

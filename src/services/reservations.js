@@ -20,13 +20,18 @@ export const getLocations = () => {
   });
 };
 
-export const getReservations = (search, page) => {
-  let params = {};
-  if (search) params.search = search;
-  if (page) params.page = page;
-
-  return axiosInstance.get('/reservations', {
-    params: params,
+export async function getReservations(queryKey) {
+  console.log(queryKey);
+  const page = queryKey?.pageParam || 1;
+  const search = queryKey?.queryKey[1];
+  const res = await axiosInstance.get('/reservations', {
+    params: {search: search, page: page},
     headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
   });
-};
+
+  return {
+    items: res?.data?.data,
+    page: res?.data?.current_page,
+    last_page: res?.data?.last_page,
+  };
+}

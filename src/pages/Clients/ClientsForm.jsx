@@ -85,7 +85,7 @@ const Demo = ({title,id}) => {
 }
 
 useEffect(()=>{
-if(title==='Edit'){
+if(title==='Edit' & 'Delete'){
 getUser(id)
 .then(r=>{
   setFormData(r?.data?.client)

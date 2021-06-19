@@ -58,16 +58,16 @@ const ChangePassword = () => {
 
     const footer =  [
         <Button disabled={isLoading} className="login-form-button" key='cancel' onClick={handleCancel}>
-            Odustani
+            Cancel
         </Button>,
 
         <Button loading={isLoading} type="primary" key="ok" form="change-password-form" icon={<SaveOutlined />} htmlType="submit" className="login-form-button">
-            Izmjeni
+            Edit
         </Button>
     ];
 
 return <>
-    <Button onClick={()=>setOpenModal(true)} icon={<KeyOutlined />}>Izmjeni lozinku</Button>
+    <Button onClick={()=>setOpenModal(true)} icon={<KeyOutlined />}>Edit password</Button>
     <Modal title='Izmjeni lozinku' visible={openModal} onCancel={handleCancel} footer={footer}>
         <Form
             id="change-password-form"
@@ -79,30 +79,30 @@ return <>
             <FormInput data={{
                 type:'password',
                 name:'old_password',
-                label:'Stara lozinka',
+                label:'Old password',
                 required:true,
                 input_params:{
-                    placeholder:"Unesite staru lozinku"
+                    placeholder:" type old password"
                 }
             }} errors={errors} control={control}/>
             <FormInput data={{
                 type:'text',
                 name:'new_password',
-                label:'Nova lozinka',
+                label:'New password',
                 required:true,
                 input_params:{
                     type:'password',
-                    placeholder:"Unesite nova lozinku"
+                    placeholder:"type new password"
                 }
             }} errors={errors} control={control}/>
             <FormInput data={{
                 type:'text',
                 name:'confirm_password',
-                label:'Potvdite lozinku',
+                label:'Confirm password',
                 required:true,
                 input_params:{
                     type:'password',
-                    placeholder:"Potvrdite novu lozinku"
+                    placeholder:"Confirm new password"
                 }
             }} errors={errors} control={control}/>
         </Form>

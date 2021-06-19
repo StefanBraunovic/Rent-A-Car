@@ -4,8 +4,7 @@ import { useMutation,useQueryClient,useQuery } from 'react-query';
 import {addVehicle, deleteVehicle, getVehicleType} from '../../services/vehicles'
 import { useForm,FormProvider } from "react-hook-form";
 import { useHistory } from 'react-router-dom';
-import Test from './ImageUploadForm'
-import ImageUploadForm from './ImageUploadForm';
+import ImageUpload from './ImageUploadForm';
 
 // const { Option } = Select;
 
@@ -81,7 +80,7 @@ const steps = [
   },
   {
     title: 'Second',
-    content:   <ImageUploadForm  fileList={fileList}/>,
+    content:   <ImageUpload  />,
   },
 ];
 

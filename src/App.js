@@ -8,7 +8,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
 import Vehicles from './pages/Vehicles/Vehicles';
 import Reservations from './pages/Reservations/Reservations';
-// import CreateReservations from './pages/Reservations/components/CreateReservations';
+import CreateReservations from './pages/Reservations/CreateReservations';
 import {ROLES} from './constants/constants';
 import ClientHome from './pages/home/client/ClientHome';
 
@@ -53,13 +53,13 @@ function App() {
           isPrivate
           role={ROLES.EMPLOYEE}
         />
-        {/* <PrivateRoute
+        <PrivateRoute
           path="/add-reservations"
           exact
           component={CreateReservations}
           isPrivate
           role={ROLES.EMPLOYEE}
-        /> */}
+        />
 
         <Route path="/" component={LoginPage} />
       </Switch>
