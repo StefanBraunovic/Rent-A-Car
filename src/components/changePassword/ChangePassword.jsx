@@ -67,7 +67,7 @@ const ChangePassword = () => {
     ];
 
 return <>
-    <Button onClick={()=>setOpenModal(true)} icon={<KeyOutlined />}>Edit password</Button>
+    <Button onClick={()=>setOpenModal(true)} >Edit password</Button>
     <Modal title='Izmjeni lozinku' visible={openModal} onCancel={handleCancel} footer={footer}>
         <Form
             id="change-password-form"

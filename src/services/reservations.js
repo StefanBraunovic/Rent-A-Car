@@ -14,6 +14,24 @@ export const createReservation = data => {
   });
 };
 
+export const showReservation = id => {
+  return axiosInstance.post(`reservation-show${id}`, {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};
+
+export const updateReservation = id => {
+  return axiosInstance.post(`reservation-update${id}`, {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};
+
+export const deleteReservation = id => {
+  return axiosInstance.delete(`reservation-update${id}`, {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};
+
 export const getLocations = () => {
   return axiosInstance.get('/locations', {
     headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},

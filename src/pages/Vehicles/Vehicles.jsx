@@ -121,7 +121,7 @@ const Vehicles = ({onSubmit})=>{
           onClick: event => {setIsModalVisible(true)}, // click row
         };
       }}
-       columns={columns} rowKey={(vehicle) => `vehicle-${vehicle.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+       columns={columns} rowKey={(vehicle) => `vehicle-${vehicle.id}`} scroll={{ y: 400, x:true  }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
     </div>
 }
 

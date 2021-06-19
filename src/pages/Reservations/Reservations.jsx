@@ -122,7 +122,7 @@ const Reservations = () =>{
       return {
         onClick: event => {  setIsModalVisible(true)}, 
       };
-    }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+    }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 , x:true }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>
   }
   

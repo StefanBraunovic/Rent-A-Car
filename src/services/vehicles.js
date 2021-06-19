@@ -32,6 +32,22 @@ export const addVehicle = data => {
   });
 };
 
+export const updateVehicle = id => {
+  return axiosInstance.post(`vehicle-update${id}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
+
+export const getEquipment = () => {
+  return axiosInstance.post(`equipment`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+    },
+  });
+};
+
 export const getAvailableVehicles = (start_date, end_date, car_type) => {
   let params = {};
   params.car_type = car_type;

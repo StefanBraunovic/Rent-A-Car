@@ -33,12 +33,6 @@ const schema = yup.object().shape({
   identification_document_no:yup.number().required(),
   phone_no:yup.string().required()
   
-  
-  // password: yup.string()
-  //     .required('required')
-  //     .min(4, 'Password is too short - should be 4 chars minimum.')
-  //     .max(12,'Password is too long - should be 12 chars maximum.')
-  //     .matches(/^[a-zA-Z0-9!#%&]*$/g, 'Password can only contain Latin letters, numbers and chars(!,#,%,&)')
 })
 
 
@@ -49,7 +43,7 @@ const Demo = ({title,id}) => {
     {  resolver: yupResolver(schema)}
   );
   
-  const [formData,setFormData] = useState(initialData);
+  const [formData,setFormData] = useState([initialData]);
   const history = useHistory();
   const queryClient = useQueryClient(initialData);
   
@@ -85,13 +79,13 @@ const Demo = ({title,id}) => {
 }
 
 useEffect(()=>{
-if(title==='Edit' & 'Delete'){
+if(title==='Edit'){
 getUser(id)
 .then(r=>{
   setFormData(r?.data?.client)
-  console.log(r?.data?.client);
   const fields = ['name','email','country_id','identification_document_no','phone_no'];
   fields.map((field) => setValue(field, formData[field]));
+  console.log(r?.data?.client);
   
     })}
     

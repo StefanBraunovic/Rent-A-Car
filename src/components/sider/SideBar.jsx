@@ -24,7 +24,7 @@ const SideBar = ()=>{
    }
 
     return <Sider style={{minHeight:'100vh'}}   breakpoint="lg"
-      collapsedWidth="0" collapsible collapsed={collapsed} onCollapse={onCollapse}>
+      collapsedWidth="0" collapsible onCollapse={onCollapse}>
       <div className="logo" />
       <Menu theme="dark" mode="inline">
         <Menu.Item key={uuid()}icon={<TeamOutlined />} >
@@ -39,14 +39,6 @@ const SideBar = ()=>{
    
       </Menu>
     </Sider>
-  
-        
-
-
-  
-
-
-
 }
 
 export default SideBar
