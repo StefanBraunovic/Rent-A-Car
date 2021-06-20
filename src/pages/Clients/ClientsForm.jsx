@@ -3,9 +3,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup  from 'yup';
 import { useEffect, useState } from 'react';
-import { useQuery,useMutation,useQueryClient } from 'react-query';
+import { useQuery,useMutation,useQueryClient,  } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import {getAllCountries,deleteUser,createClient, getUser} from '../../services/clients'
+import {getAllCountries,deleteUser,createClient, getUser, updateClient} from '../../services/clients'
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -19,10 +19,11 @@ const layout = {
 };
 /* eslint-disable no-template-curly-in-string */
 const initialData = {
+  id:'',
   name:'',
-  identification_document_no:0,
-  phone_no:'',
-  country_id:0,
+  identification_document_no:'',
+  phone_no:0,
+  country_id:'',
 }
 
 
@@ -31,65 +32,88 @@ const schema = yup.object().shape({
   email: yup.string().email().required(),
   country_id: yup.number().required(),
   identification_document_no:yup.number().required(),
-  phone_no:yup.string().required()
+  phone_no:yup.number().required()
   
 })
 
 
-const Demo = ({title,id}) => {
+const Demo = ({title, ClientId, onSuccessCallback}) => {
 
-  const { handleSubmit, control, reset,setValue, formState:{ errors } } = useForm(
- 
+  const { handleSubmit, control, reset, setValue, formState:{ errors } } = useForm(
+    {
+      defaultValues: {
+        id:'',
+  name:'',
+  identification_document_no:'',
+  phone_no:'',
+  country_id:'',
+      }
+    },
     {  resolver: yupResolver(schema)}
+    
   );
   
-  const [formData,setFormData] = useState([initialData]);
+  const [formData,setFormData] = useState('');
   const history = useHistory();
   const queryClient = useQueryClient(initialData);
   
   const {data} = useQuery('countries',getAllCountries);
-  
- 
 
-  const onFinish = (data) => {
+  const updateMutation = useMutation(
+    ['updateMutation', ClientId],
+    (data) => updateClient(data, ClientId),
+    {
+      onSuccess: () => {
+        message.success(('successMessages.updated'));
+        queryClient.refetchQueries('clients');
+        // onCancel();
+      },
+      onError: (error) => {
+     
+        console.log(error.response.data.message);
+      },
+    }
+  );
+
+  const onFinish = async (data) => {
 
     console.log(data);
     if(title==='Add new client'){
+      reset();
       createClient(data)
       .then((r)=>{
         console.log(r);
-        history.push('clients')
+        queryClient.refetchQueries('clients');
+        onSuccessCallback();
       })
       .catch((err)=>{
         console.log(err);
       })
-    }else if (title === 'Edit'){
-      console.log('edita');
+    } else if (title === 'Edit'){
+      await updateMutation.mutateAsync(data)
+      queryClient.refetchQueries('clients');
+      onSuccessCallback();
+      reset();
+      console.log(formData);
     }
   
   };
 
   const onDelete = () => {
     // console.log(id);
-    deleteUser(id)
+    deleteUser(ClientId.id)
     .then((r)=>{
         console.log(r);
+        queryClient.refetchQueries('clients');
+        onSuccessCallback();
     })
-    history.push('/clients') 
 }
 
-useEffect(()=>{
 if(title==='Edit'){
-getUser(id)
-.then(r=>{
-  setFormData(r?.data?.client)
-  const fields = ['name','email','country_id','identification_document_no','phone_no'];
-  fields.map((field) => setValue(field, formData[field]));
-  console.log(r?.data?.client);
-  
-    })}
-    
- },[])
+Object.keys(ClientId).forEach(prop=>{
+  setValue(prop,ClientId[prop])
+})
+}
 
  
 
@@ -98,7 +122,7 @@ getUser(id)
 if (title==='Delete'){
     return <div>
        
-          <div><h3>Are you sure to delete {formData.name}?</h3>
+          <div><h3>Are you sure to delete {ClientId.name}?</h3>
           </div>
      
      <Button style={{display:'block'}} onClick={()=>onDelete()} type="primary" htmlType="submit">
@@ -195,7 +219,7 @@ return (
 
   </Form.Item>
 
-  <Form.Item
+  {/* <Form.Item
   label='Remarks'
   htmlFor='remarks'
   required={true}
@@ -210,7 +234,7 @@ return (
       />
 <p style={{color:'red'}}>{errors.phone_no?.type === 'required' && 'This field is required' }</p>
 
-  </Form.Item>
+  </Form.Item> */}
   
       <input type="submit" />
     </Form>

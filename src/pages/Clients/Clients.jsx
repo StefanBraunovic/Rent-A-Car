@@ -1,36 +1,41 @@
 import React, { useEffect, useState} from 'react';
 import { Table, Space,Input,Button } from 'antd';
 import { getAllClients} from '../../services/clients';
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query';
 import { Modal} from 'antd';
-import Demo from './ClientsForm'
-import style from  './Clients.module.css'
+import Demo from './ClientsForm';
+
+import { useForm,  } from "react-hook-form";
 
 const Clients = ()=>{
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
+  const {reset}=useForm()
   const [content, setContent] = useState('');
-  const[search,setSearch] = useState();
-    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('clients',getAllClients, {
-        getNextPageParam: ((lastPage) => {
-            const currentPageNo = lastPage.data.current_page;
-            const totalPageNo = lastPage.data.last_page;
-            return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
-        }),
-    })
+  const [search,setSearch] = useState();
+  const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(['clients', search], getAllClients, {
+      getNextPageParam: ((lastPage) => {
+          const currentPageNo = lastPage.data.current_page;
+          const totalPageNo = lastPage.data.last_page;
+          return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
+      }),
+  })
 
     let tableData = [];
     data?.pages.forEach((page) => {
         tableData.push(...page.data.data);
     })
 
-          const showModal = ()=>{
-          setIsModalVisible(true);
-        }
+    const showModal = () => {
+      setIsModalVisible(true);
+    }
     const handleCancel = () => {
       setIsModalVisible(false);
-        };
-  
+    };
+    const closeModal = () =>{
+      reset();
+      setIsModalVisible(false);
+    }
+
     useEffect((pageParams) => {
     
         var tableContent = document.querySelector('.ant-table-body')
@@ -89,10 +94,10 @@ const Clients = ()=>{
             render: (record) => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <Demo title='Delete' id={record.id}/>
+                  <Demo title='Delete' ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
-                  <Demo  title='Edit' id={record.id}/>
+                  <Demo  title='Edit' ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Edit</button>
               </Space>
             ),
@@ -102,11 +107,11 @@ const Clients = ()=>{
     return <div>
       <Button style={{border:'none'}}
       onClick={() => { showModal(); setContent(
-        <Demo title='Add new client'/>
+        <Demo title='Add new client' onSuccessCallback={closeModal} />
       ); }}
       >add new client</Button>
       
-      <Modal title="Basic Modal"     onCancel={handleCancel} visible={isModalVisible}>
+      <Modal title="Basic Modal" onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
@@ -114,9 +119,9 @@ const Clients = ()=>{
    
       <Table   onRow={(record, rowIndex) => {
     return {
-      onClick: event => {  setIsModalVisible(true)}, 
+      onClick: event => {  showModal();    }, 
     };
-  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 ,x:true  }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400   }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>
      
  

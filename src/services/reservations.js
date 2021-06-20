@@ -53,3 +53,9 @@ export async function getReservations(queryKey) {
     last_page: res?.data?.last_page,
   };
 }
+
+export const getEquipment = () => {
+  return axiosInstance.get('/equipment', {
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+};

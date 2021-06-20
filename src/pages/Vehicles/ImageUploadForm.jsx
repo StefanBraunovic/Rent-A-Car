@@ -6,7 +6,7 @@ function ImageUpload() {
 
  return (
     <form>
-      <input {...methods.register("photo[]")} type="file"  />
+      <input {...methods.register("photo[]")} type="file" accept="image/" max={5} mix={1}     multiple  />
     
     </form>
     

@@ -2,11 +2,12 @@ import {Controller} from "react-hook-form";
 import {Form, Input, InputNumber, Select, Tooltip,DatePicker} from "antd";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import React from "react";
+import {AsyncPaginate} from "react-select-async-paginate";
 
 
 const FormInput = ({data:{name,type,
     label,required,icon,tooltip,defaultValue,
-    input_params, options},errors,control}) => {
+    input_params, helper_params, options},errors,control, setValue}) => {
 
     return <Form.Item
         validateStatus={errors && errors[name] ? 'error' : ''}
@@ -57,6 +58,22 @@ const FormInput = ({data:{name,type,
                             })}
 
                         </Select>
+                        
+                    case 'select_async':
+
+                        return <div>
+                            <AsyncPaginate
+                            defaultValue={defaultValue}
+                            additional={{
+                                page: 1,
+                            }}
+                            onChange={(e)=>{
+                                setValue(name,e.value,{shouldValidate:true,shouldDirty:true,shouldTouch:true});
+                            }}
+                            {...helper_params}
+                        />
+                            <input type="hidden" id={name} {...field} {...input_params} />
+                        </div>
                     case 'textarea':
                        return <Input.TextArea
                             {...field}

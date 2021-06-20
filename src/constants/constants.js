@@ -9,3 +9,18 @@ export const RESERVATION_STATUS = {
   PRESENT: 2,
   FUTURE: 3,
 };
+
+export const CAR_TYPES = [
+  {
+    label: 'Small',
+    value: 1,
+  },
+  {
+    label: 'Medium',
+    value: 2,
+  },
+  {
+    label: 'Premium',
+    value: 3,
+  },
+];

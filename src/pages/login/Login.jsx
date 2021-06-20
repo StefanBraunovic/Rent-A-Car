@@ -7,8 +7,9 @@ import Car from '../../images/car-animation/car.png';
 import wheel from '../../images/car-animation/wheel.png';
 import logo from '../../images/logo.png';
 import {useHistory} from 'react-router-dom';
+
 import {Login,me} from '../../services/account'
-import { saveAuth } from '../../functions/helper';
+import { auth, saveAuth } from '../../functions/helper';
 import {ROLES} from "../../constants/constants";
 
 
@@ -38,12 +39,14 @@ const LoginPage = ()=>{
             localStorage.setItem('jwt-token', response?.data['access_token'])
             let token =  response?.data?.access_token;
             me(token).then(res=>{
-                localStorage.setItem('role', response?.data?.role_id)
-                    saveAuth({
-                        name:res?.data?.name,
-                      role:res?.data?.role_id === 1? ROLES.EMPLOYEE:ROLES.CLIENT,
-                      token:token
-                    })
+                
+                saveAuth({
+                    name:res?.data?.name,
+                    role:res?.data?.role_id === 1? ROLES.EMPLOYEE:ROLES.CLIENT,
+                    token:token
+                })
+                // localStorage.setItem('role', auth())
+                localStorage.setItem('role_id',res?.data.role_id)
                     history.push('/home')
                 })
                  })

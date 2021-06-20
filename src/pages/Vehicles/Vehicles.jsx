@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Table, Tag, Space,Modal,Button } from 'antd';
+import { Table, Tag, Space,Modal,Button ,Input} from 'antd';
 import { getAllVehicles } from '../../services/vehicles';
 import { useInfiniteQuery } from 'react-query'
 import VehiclesForm from './VehiclesForm';
@@ -8,8 +8,9 @@ import style from './Vehicles.module.css'
 const Vehicles = ({onSubmit})=>{
   const [content, setContent] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [search,setSearch] = useState();
   
-    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('vehicles', getAllVehicles, {
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(['vehicles',search], getAllVehicles, {
         getNextPageParam: ((lastPage) => {
             const currentPageNo = lastPage.data.current_page;
             const totalPageNo = lastPage.data.last_page;
@@ -93,10 +94,10 @@ const Vehicles = ({onSubmit})=>{
             render: (record) => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <VehiclesForm title='Delete' id={record.id} />
+                  <VehiclesForm title='Delete' vehicleId={record} />
                 ); ;}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
-                  <VehiclesForm title='Edit'/>
+                  <VehiclesForm title='Edit' vehicleId={record}/>
                 );}} >Edit</button>
               </Space>
             ),
@@ -109,6 +110,7 @@ const Vehicles = ({onSubmit})=>{
         <VehiclesForm title='Add new vehicle'/>
       ); }}
       >add new vehicle</Button>
+       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
        <Modal title="Basic Modal" 
        
         onCancel={handleCancel} visible={isModalVisible}>

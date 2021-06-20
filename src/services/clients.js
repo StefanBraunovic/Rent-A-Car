@@ -1,7 +1,12 @@
 import axiosInstance from './axios';
+import {dataToOptions} from '../functions/helper';
 
-export const getAllClients = ({pageParam = 1}) => {
-  return axiosInstance.get('clients?page=' + pageParam, {
+export const getAllClients = ({queryKey, pageParam = 1}) => {
+  let url = 'clients?page=' + pageParam;
+  if (queryKey[1]) {
+    url += `&search=${queryKey[1]}`;
+  }
+  return axiosInstance.get(url, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
     },
@@ -27,6 +32,21 @@ export const getUser = userId => {
   });
 };
 
+export async function getClientsOptions(search, loadedOptions, {page}) {
+  const res = await axiosInstance.get('/clients', {
+    params: {page: page},
+    headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
+  });
+
+  return {
+    options: dataToOptions(res?.data?.data),
+    hasMore: res?.data?.current_page < res?.data?.last_page,
+    additional: {
+      page: page + 1,
+    },
+  };
+}
+
 export const getAllCountries = () => {
   return axiosInstance.get('countries', {
     headers: {
@@ -43,18 +63,36 @@ export const deleteUser = id => {
   });
 };
 
-export const updateClient = (data, id) => {
-  return axiosInstance.post(`/user-update/${id}`, data, {
+export const updateClient = async data => {
+  const clientData = {
+    name: data.name,
+    email: data.email,
+    phone_no: data.phone_no,
+    identification_document_no: String(data.identification_document_no),
+    country_id: String(data.country_id),
+  };
+
+  axiosInstance.post(`user-update/${data.id}`, clientData, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+      'Content-Type': 'application/json',
     },
   });
+  // console.log('req', req);
 };
 
 export const createClient = data => {
-  return axiosInstance.post('/user-store', data, {
+  const clientData = {
+    name: data.name,
+    email: data.email,
+    phone_no: String(data.phone_no),
+    identification_document_no: String(data.identification_document_no),
+    country_id: String(data.country_id),
+  };
+  return axiosInstance.post('/user-store', clientData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
+      'Content-Type': 'application/json',
     },
   });
 };

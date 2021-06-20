@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
 import { Form, Input, InputNumber, Button ,message,Select,Steps} from 'antd';
 import { useMutation,useQueryClient,useQuery } from 'react-query';
-import {addVehicle, deleteVehicle, getVehicleType} from '../../services/vehicles'
-import { useForm,FormProvider } from "react-hook-form";
+import {addVehicle, deleteVehicle, getVehicleType, updateVehicle} from '../../services/vehicles'
+import { useForm,FormProvider,Controller } from "react-hook-form";
 import { useHistory } from 'react-router-dom';
 import ImageUpload from './ImageUploadForm';
 
@@ -20,11 +20,11 @@ const layout = {
 
 const { Step } = Steps;
 
-const VehiclesForm = ({title,id, visible}) => {
+const VehiclesForm = ({title,vehicleId}) => {
   const history = useHistory();
-  const [formData,setFormdata] = useState();
   const [current, setCurrent] = React.useState(0);
   const queryClient = useQueryClient();
+  const {data} = useQuery('car-types',getVehicleType);
   const next = () => {
     setCurrent(current + 1);
   };
@@ -32,18 +32,52 @@ const VehiclesForm = ({title,id, visible}) => {
     setCurrent(current - 1);
   };
   const methods = useForm();
-  const { register, handleSubmit, watch, formState: { errors } } = methods;
-  const [fileList, setFileList] = useState([]);
-  const onSubmit = (data)=>{
-    addVehicle(data)
+  const { setValue,reset, handleSubmit,control, formState: { errors } } = methods;
+  
+
+
+  const updateMutation = useMutation(
+    ['updateMutation', vehicleId],
+    (data) => updateVehicle(data, vehicleId),
+    {
+      onSuccess: () => {
+        message.success(('successMessages.updated'));
+        queryClient.refetchQueries('clients');
+        // onCancel();
+      },
+      onError: (error) => {
+     
+        console.log(error.response.data.message);
+      },
+    }
+  );
+
+  const onSubmit = async data=>{
+   
     console.log(data);
+    console.log(data);
+    if(title==='Add new vehicle'){
+      reset();
+       await addVehicle(data);
+      queryClient.refetchQueries('vehicles')
+    } else if (title === 'Edit'){
+      await updateMutation.mutateAsync(data)
+      queryClient.refetchQueries('clients');
+    
+      reset();
+    
+    }
 
   }
-  const {data} = useQuery('car-types',getVehicleType);
+  if(title==='Edit'){
+    Object.keys(vehicleId).forEach(prop=>{
+      setValue(prop,vehicleId[prop])
+    })
+    }
 
   console.log(data?.data?.data);
   const onDelete = () => {
-       deleteVehicle(id)
+       deleteVehicle(vehicleId)
        .then((r)=>{
            console.log(r);
        })
@@ -52,31 +86,122 @@ const VehiclesForm = ({title,id, visible}) => {
 const steps = [
   {
     title: 'First',
-    content:  <form style={{display:'grid',width:'250px', margin:'auto'}} >
-    <label htmlFor="plate_no">Plates</label>
-    <input type='number' name='plate_no' defaultValue="test" {...register("plate_no")} />
-    <label htmlFor="plate_no">Production Year</label>
-    <input type='number' name='production_year' defaultValue="test" {...register("production_year")} />
-    <label htmlFor="plate_no">Vehicle Type</label>
-    <select name='car_type_id' {...register("car_type_id")}>
-    {data?.data?.data.map(car => {
-             return <option value={car.id}>{car.name}</option>
-              }) 
-            }
-    </select>
-    <label htmlFor="no_of_seats">Seats</label>
-    <input type='number' name='no_of_seats' defaultValue="test" {...register("no_of_seats")} />
-    <label htmlFor="price_per_day">Price/Day</label>
-    <input type='number' name='price_per_day' defaultValue="test" {...register("price_per_day")} />
-    <label htmlFor="remarks">Additional Remarks</label>
-    <textarea id="remarks" name="remarks"  {...register("remarks")} rows="4" cols="50">
-
-      </textarea>
-    {/* errors will return when field validation fails  */}
-    {errors.exampleRequired && <span>This field is required</span>}
-    
+    content: 
+    <Form>
+      
   
-  </form>,
+    <Form.Item
+  
+    span={6}
+    label='Plates'
+    htmlFor='plate_no'
+    required={true}
+    >
+    <Controller
+    
+          name="plate_no"
+          control={control}
+          rules={{ required: true}}
+          render={({ field }) => <Input 
+         {...field} />}
+        />
+  <p style={{color:'red'}}>{errors.plate_no?.type === 'required' && 'This field is required'}
+  </p>
+    </Form.Item>
+          
+  
+    <Form.Item
+  
+    span={6}
+    label='	Production Year'
+    htmlFor='production_year'
+    required={true}
+    >
+    <Controller
+    
+          name="production_year"
+          control={control}
+          rules={{ required: true}}
+          render={({ field }) => <Input 
+         {...field} />}
+        />
+  <p style={{color:'red'}}>{errors.production_year?.type === 'required' && 'This field is required'}
+  </p>
+    </Form.Item>
+      
+    <Form.Item
+        
+        label="Vehicle Type"
+        required={true}
+      
+      >
+  <Controller
+        name="car_type_id"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) =>     <Select defaultValue='choose' options={
+          data?.data?.data.map((car) => {
+            return { label: car.name, value: car.id };
+          }) || []
+        }  {...field} />
+}/>
+<p style={{color:'red'}}>{errors.car_id?.type === 'required' && 'Please select a country' }</p>
+          </Form.Item>
+              <Form.Item
+  
+    span={6}
+    label='Number of seats'
+    htmlFor='no_of_seats'
+    required={true}
+    >
+    <Controller
+    
+          name="no_of_seats"
+          control={control}
+          rules={{ required: true}}
+          render={({ field }) => <Input 
+         {...field} />}
+        />
+  <p style={{color:'red'}}>{errors.no_of_seats?.type === 'required' && 'This field is required'}
+  </p>
+    </Form.Item>
+    <Form.Item
+  
+  span={6}
+  label='Price/Day'
+  htmlFor='price_per_day'
+  required={true}
+  >
+  <Controller
+  
+        name="price_per_day"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <Input 
+       {...field} />}
+      />
+<p style={{color:'red'}}>{errors.price_per_day?.type === 'required' && 'This field is required'}
+</p>
+  </Form.Item>
+  <Form.Item
+  
+  span={6}
+  label='Additional Remarks'
+  htmlFor='remarks'
+  required={true}
+  >
+  <Controller
+  
+        name="remarks"
+        control={control}
+        rules={{ required: true}}
+        render={({ field }) => <Input 
+       {...field} />}
+      />
+<p style={{color:'red'}}>{errors.remarks?.type === 'required' && 'This field is required'}
+</p>
+  </Form.Item>
+    </Form> ,
   },
   {
     title: 'Second',
