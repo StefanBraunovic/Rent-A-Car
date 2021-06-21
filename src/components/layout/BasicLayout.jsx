@@ -1,7 +1,5 @@
-
 const BasicLayout = ({children}) => {
-    return children;
- 
-}
+  return children;
+};
 
 export default BasicLayout;
