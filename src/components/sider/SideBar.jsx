@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 import { Layout, Menu} from 'antd';
 import {
     DesktopOutlined,
-
+    CarOutlined,
     TeamOutlined,
    
   } from '@ant-design/icons';
@@ -30,7 +30,7 @@ const SideBar = ()=>{
         <Menu.Item key={uuid()}icon={<TeamOutlined />} >
         <Link to="/clients">Clients</Link>
         </Menu.Item>
-        <Menu.Item key={uuid()}icon={<DesktopOutlined />} >
+        <Menu.Item key={uuid()}icon={<CarOutlined />} >
         <Link to="/vehicles">Vehicles</Link>
         </Menu.Item>
         <Menu.Item key={uuid()}icon={<DesktopOutlined />} >

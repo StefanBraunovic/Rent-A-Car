@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Col, Form, Input, Row} from "antd";
 import FormInput from "../../../components/formInput/FormInput";
 import {getEquipment, getLocations} from "./../../../services/reservations";
-import {getClientsOptions,getClients} from "../../../services/clients";
+import {getClientsOptions} from "../../../services/clients";
 
 
 const CreateForm = ({onFinish,handleSubmit,errors,control,setValue,getValues,price_per_day}) => {
@@ -20,16 +20,12 @@ const CreateForm = ({onFinish,handleSubmit,errors,control,setValue,getValues,pri
         });
     },[]);
 
-    const INPUT_TYPE = {
-        SELECT_ASYNC:7
-    }
 
     return  <Form
         id="create-reservation-form"
         labelCol={{ span: 12 }}
         wrapperCol={{ span: 17 }}
         layout="horizontal"
-        /*initialValues={{}}*/
         onFinish={handleSubmit(onFinish)}
         onValuesChange={()=>{}}
         size="default"
@@ -110,10 +106,10 @@ const CreateForm = ({onFinish,handleSubmit,errors,control,setValue,getValues,pri
         <FormInput data={{
             type:'select',
             name:'rent_location_id',
-            label:'Lokacija preuzimanja',
+            label:'Rent location',
             required:true,
             input_params:{
-                placeholder:"Izaberite lokaciju preuzimanja"
+                placeholder:"Choose rent location"
             },
             options:locationOptions
         }} errors={errors} control={control}/>
@@ -121,10 +117,10 @@ const CreateForm = ({onFinish,handleSubmit,errors,control,setValue,getValues,pri
         <FormInput data={{
             type:'select',
             name:'return_location_id',
-            label:'Lokacija vracanja',
+            label:'Return location',
             required:true,
             input_params:{
-                placeholder:"Izaberite lokaciju vracanja"
+                placeholder:"Choose return location"
             },
             options:locationOptions
         }} errors={errors} control={control}/>
@@ -142,18 +138,17 @@ const CreateForm = ({onFinish,handleSubmit,errors,control,setValue,getValues,pri
                     step:1,
                     min:0,
                     placeholder:'0'
-                   /* style:{width:'100%',color:'black'}*/
+            
                 }
             }} errors={errors} control={control}/></Col>
         })}
     </Row>
         </Input.Group>
-        <p>Ukupna cijena:</p>
+        <p>Total price</p>
         <FormInput data={{
             type: 'number',
             name:'total_price',
-            label:'Ukupna cijena',
-            /* required:true,*/
+            label:'Total price',
             input_params:{
                 readOnly:true,
                 min:0,

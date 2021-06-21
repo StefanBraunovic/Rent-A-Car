@@ -38,10 +38,6 @@ const Vehicles = ({onSubmit})=>{
     data?.pages.forEach((page) => {
         tableData.push(...page.data.data);
     })
-
-    // const onClick = (id)=>{
-    //   console.log(id);
-    // }
     
     useEffect((pageParams) => {
         var tableContent = document.querySelector('.ant-table-body')
@@ -94,7 +90,7 @@ const Vehicles = ({onSubmit})=>{
             render: (record) => (
               <Space size="middle">
                 <button onClick={() => { showModal(); setContent(
-                  <VehiclesForm title='Delete' vehicleId={record} />
+                  <VehiclesForm title='Delete' vehicleId={record.id} />
                 ); ;}} >Delete</button>
                <button onClick={() => { showModal(); setContent(
                   <VehiclesForm title='Edit' vehicleId={record}/>
@@ -111,13 +107,13 @@ const Vehicles = ({onSubmit})=>{
       ); }}
       >add new vehicle</Button>
        <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
-       <Modal title="Basic Modal" 
+       <Modal  footer={null}
        
         onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
        <Table
-
+     
        onRow={(record, rowIndex) => {
         return {
           onClick: event => {setIsModalVisible(true)}, // click row

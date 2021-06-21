@@ -1,12 +1,14 @@
-import React,{useState} from 'react'
-import { Form, Input, InputNumber, Button ,message,Select,Steps} from 'antd';
+import React, {useState} from 'react'
+import { Form, Input, Button ,message,Select,Steps} from 'antd';
 import { useMutation,useQueryClient,useQuery } from 'react-query';
 import {addVehicle, deleteVehicle, getVehicleType, updateVehicle} from '../../services/vehicles'
 import { useForm,FormProvider,Controller } from "react-hook-form";
 import { useHistory } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup  from 'yup';
 import ImageUpload from './ImageUploadForm';
+import Swal from 'sweetalert2'
 
-// const { Option } = Select;
 
 const layout = {
   labelCol: {
@@ -16,7 +18,10 @@ const layout = {
     span: 16,
   },
 };
-/* eslint-disable no-template-curly-in-string */
+
+
+
+
 
 const { Step } = Steps;
 
@@ -31,9 +36,9 @@ const VehiclesForm = ({title,vehicleId}) => {
   const prev = () => {
     setCurrent(current - 1);
   };
-  const methods = useForm();
+  const methods = useForm(     );
   const { setValue,reset, handleSubmit,control, formState: { errors } } = methods;
-  
+  const [errorsBack, setErrors] = useState();
 
 
   const updateMutation = useMutation(
@@ -43,11 +48,12 @@ const VehiclesForm = ({title,vehicleId}) => {
       onSuccess: () => {
         message.success(('successMessages.updated'));
         queryClient.refetchQueries('clients');
-        // onCancel();
+
       },
       onError: (error) => {
      
-        console.log(error.response.data.message);
+    
+        setErrors(error.response.data.message)
       },
     }
   );
@@ -58,11 +64,23 @@ const VehiclesForm = ({title,vehicleId}) => {
     console.log(data);
     if(title==='Add new vehicle'){
       reset();
-       await addVehicle(data);
+       await addVehicle(data).then(r=>{
+        Swal.fire(
+          'Good job!',
+          'You created the vehicle  !',
+          'success'
+     )
+     queryClient.refetchQueries('clients');
+ 
+       })
+       .catch(err=>{
+        setErrors(err.response.data.message)
+       })
       queryClient.refetchQueries('vehicles')
     } else if (title === 'Edit'){
       await updateMutation.mutateAsync(data)
-      queryClient.refetchQueries('clients');
+      queryClient.refetchQueries('vehicles');
+     
     
       reset();
     
@@ -101,12 +119,12 @@ const steps = [
     
           name="plate_no"
           control={control}
-          rules={{ required: true}}
+          rules={{ required: true, minLength:7}}
           render={({ field }) => <Input 
          {...field} />}
         />
-  <p style={{color:'red'}}>{errors.plate_no?.type === 'required' && 'This field is required'}
-  </p>
+  <p style={{color:'red'}}>{errors.plate_no?.type === 'required' && 'This field is required'}</p>
+  <p style={{color:'red'}}>{errors.plate_no?.type === 'minLength' && 'The minimum character is seven'}</p>
     </Form.Item>
           
   
@@ -121,12 +139,13 @@ const steps = [
     
           name="production_year"
           control={control}
-          rules={{ required: true}}
+          rules={{ required: true,min:1950, max:2021}}
           render={({ field }) => <Input 
          {...field} />}
         />
-  <p style={{color:'red'}}>{errors.production_year?.type === 'required' && 'This field is required'}
-  </p>
+  <p style={{color:'red'}}>{errors.production_year?.type === 'required' && 'This field is required'}</p>
+  <p style={{color:'red'}}>{errors.production_year?.type === 'min'&& 'the minimum year is 1950'}</p>
+  <p style={{color:'red'}}>{errors.production_year?.type === 'max'&& 'the maximum year is 2021'}</p>
     </Form.Item>
       
     <Form.Item
@@ -158,12 +177,13 @@ const steps = [
     
           name="no_of_seats"
           control={control}
-          rules={{ required: true}}
+          rules={{ required: true, max:5, min:2}}
           render={({ field }) => <Input 
          {...field} />}
         />
-  <p style={{color:'red'}}>{errors.no_of_seats?.type === 'required' && 'This field is required'}
-  </p>
+  <p style={{color:'red'}}>{errors.no_of_seats?.type === 'required' && 'This field is required'}</p>
+  <p style={{color:'red'}}>{errors.no_of_seats?.type === 'max' && 'The maximum seats is five'}</p>
+  <p style={{color:'red'}}>{errors.no_of_seats?.type === 'min' && 'The minimal seats is five'}</p>
     </Form.Item>
     <Form.Item
   
@@ -176,12 +196,13 @@ const steps = [
   
         name="price_per_day"
         control={control}
-        rules={{ required: true}}
+        rules={{ required: true, max:500, min:40}}
         render={({ field }) => <Input 
        {...field} />}
       />
-<p style={{color:'red'}}>{errors.price_per_day?.type === 'required' && 'This field is required'}
-</p>
+<p style={{color:'red'}}>{errors.price_per_day?.type === 'required' && 'This field is required'}</p>
+<p style={{color:'red'}}>{errors.price_per_day?.type === 'max' && 'Maximum price per day is 500€'}</p>
+<p style={{color:'red'}}>{errors.price_per_day?.type === 'min' && 'Minimum price per day is 40€'}</p>
   </Form.Item>
   <Form.Item
   
@@ -226,7 +247,7 @@ return (
     <form action=" 
     " onSubmit={handleSubmit(onSubmit)}>
 
-<Steps current={current}>
+<Steps style={{padding:'20px'}} current={current}>
         {steps.map(item => (
           <Step key={item.title} title={item.title} />
         ))}
@@ -234,7 +255,7 @@ return (
       <div className="steps-content">{steps[current].content}</div>
       <div className="steps-action">
         {current < steps.length - 1 && (
-          <Button type="secondary" onClick={() => next()}>
+          <Button  type="secondary" onClick={() => next()}>
             Next
           </Button>
         )}
@@ -243,7 +264,7 @@ return (
             Previous
           </Button>
         )}
-      <input type="submit"   />
+      <input style={{float:'right'}} type="submit"   />
       </div>
     </form>
   

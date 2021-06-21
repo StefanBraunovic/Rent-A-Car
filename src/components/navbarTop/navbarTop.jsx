@@ -17,7 +17,7 @@ const history = useHistory()
 
   const [content, setContent] = useState('');
   const [userName, setUserName] = useState();
-  const [role, setUserRole] = useState('');
+ 
 
 
   const showModal = ()=>{
@@ -36,8 +36,7 @@ const history = useHistory()
   useEffect(()=>{
     me().then((r)=>{
         setUserName(r.data.name)
-        setUserRole(r.data.role)
-        console.log(r.data.role_id);
+       
       })
   })
 
@@ -51,7 +50,7 @@ const history = useHistory()
       >add new vehicle</Button>
     </Menu.Item>
       <Menu.Item key={uuid()}>
-      <Button style={{border:'none'}}
+      <Button   style={{border:'none'}}
       onClick={() => { showModal(); setContent(
         <ClientsForm title='Add new client'/>
       ); }}
@@ -61,7 +60,7 @@ const history = useHistory()
       <Link to="/add-reservations">Add new reservetions</Link>
       </Menu.Item>
       <Menu.Item key={uuid()}>
-        <Button style={{border:'none'}}
+        <Button key={uuid()} style={{border:'none'}}
       onClick={() => {localStorage.clear('jwt-token');history.push('/') }}
       >Logout</Button>
       </Menu.Item>
@@ -71,7 +70,7 @@ const history = useHistory()
         <ChangePassword/>
       </Menu.Item>
       <Menu.Item key={uuid()}>
-        <Button style={{border:'none'}}
+        <Button key={uuid()} style={{border:'none'}}
       onClick={() => {localStorage.clear('jwt-token');history.push('/') }}
       >Logout</Button>
       </Menu.Item>

@@ -56,16 +56,17 @@ const Clients = ()=>{
           dataIndex: 'name',
           key: 'name',
           
+          
          
         },
         {
-          title: 'identification_document_no',
+          title: 'ID & Passport',
           dataIndex: 'identification_document_no',
           key: 'identification_document_no',
         
         },
         {
-          title: 'phone_no',
+          title: 'Phone number',
           dataIndex: 'phone_no',
           key: 'phone_no',
        
@@ -96,8 +97,8 @@ const Clients = ()=>{
                 <button onClick={() => { showModal(); setContent(
                   <Demo title='Delete' ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Delete</button>
-               <button onClick={() => { showModal(); setContent(
-                  <Demo  title='Edit' ClientId={record} onSuccessCallback={closeModal} />
+               <button onClick={() => {  showModal(); setContent(
+                  <Demo  title='Edit'  ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Edit</button>
               </Space>
             ),
@@ -111,7 +112,7 @@ const Clients = ()=>{
       ); }}
       >add new client</Button>
       
-      <Modal title="Basic Modal" onCancel={handleCancel} visible={isModalVisible}>
+      <Modal footer={null} title="Basic Modal" onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
@@ -121,7 +122,7 @@ const Clients = ()=>{
     return {
       onClick: event => {  showModal();    }, 
     };
-  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400   }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+  }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400  ,x:true }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>
      
  

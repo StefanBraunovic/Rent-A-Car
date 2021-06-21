@@ -53,8 +53,9 @@ export const updateVehicle = data => {
     no_of_seats: data.no_of_seats,
     price_per_day: data.price_per_day,
     remarks: data.remarks,
-    photo: data.photo === 'photo' && 'photo[]',
+    'photo[]': data.photo,
   };
+  console.log(data.photo);
   console.log(data.photo);
   return axiosInstance.post(`vehicle-update/${data.id}`, vehicleData, {
     headers: {

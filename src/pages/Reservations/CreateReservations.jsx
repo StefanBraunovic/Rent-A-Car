@@ -8,7 +8,7 @@ import * as yup from "yup";
 import CreateModal from "./components/CreateModal";
 import {useInfiniteQuery,  useQueryClient} from "react-query";
 import {getAvailableVehicles} from "../../services/vehicles";
-import {concatData1, showMessage} from "../../functions/helper";
+import {concatDataTwo} from "../../functions/helper";
 import {CAR_TYPES} from '../../constants/constants'
 import moment from "moment";
 
@@ -48,19 +48,19 @@ const CreateReservation = () => {
     const[params,setParams] = useState({});
     const columns = [
         {
-            title: 'Broj tablica',
+            title: 'Plates number',
             dataIndex: 'plate_no',
         },
         {
-            title: 'Goidna',
+            title: 'Production Year',
             dataIndex: 'production_year',
         },
         {
-            title: 'Broj sjedista',
+            title: 'Number of seats',
             dataIndex: 'no_of_seats',
         },
         {
-            title: 'Cijena',
+            title: 'Price/Day',
             dataIndex: 'price_per_day',
         },
     ];
@@ -68,7 +68,6 @@ const CreateReservation = () => {
     const queryClient = useQueryClient();
     const {
         data,
-        error,
         isError,
         fetchNextPage,
         hasNextPage,
@@ -92,14 +91,14 @@ const CreateReservation = () => {
     return ( <>
         <Space style={{ marginTop: 10,display:'flex',justifyContent:'start' }}>
            <div>
-              <span>Tip vozila: </span>
-            <Select placeholder="Izaberite tip vozila" style={{width:150}} onChange={(e)=>setFilter({...filter,car_type:e})}>
+              <span>Vehicle Type </span>
+            <Select placeholder=" Choose vehicle type" style={{width:150}} onChange={(e)=>setFilter({...filter,car_type:e})}>
                 {CAR_TYPES.map((option,index) => {
                     return  <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
                 })}
             </Select>
            </div>
-            <div><span>Period: </span>
+            <div><span>Period of time</span>
                 <DatePicker.RangePicker onChange={(e)=>{
                     if(e) {
                         let start_date = moment(e[0]._d).format('YYYY-MM-DD');
@@ -110,7 +109,7 @@ const CreateReservation = () => {
                         setFilter({...filter,start_date:'',end_date:''});
                     }
                 }} />
-                <Button type={ JSON.stringify(filter) === JSON.stringify(params)?'':'primary'} onClick={()=>setParams({...filter})} style={{marginLeft:10}}  icon={<FilterOutlined />} >Pretrazi</Button>
+                <Button type={ JSON.stringify(filter) === JSON.stringify(params)?'':'primary'} onClick={()=>setParams({...filter})} style={{marginLeft:10}}  icon={<FilterOutlined />} >Search</Button>
             </div>
 
             <CreateModal
@@ -126,11 +125,9 @@ const CreateReservation = () => {
             rowKey="id"
             loading={isFetchingNextPage}
             columns={columns}
-            dataSource={concatData1(data)}
+            dataSource={concatDataTwo(data)}
             onFetch={handleFetch}
-            /*pageSize={10}
-            total={data?.pages[0]?.data?.total}*/
-            onRow={onRowClick}
+              onRow={onRowClick}
             className='hover-row'
             bordered={true}
             pagination={false}

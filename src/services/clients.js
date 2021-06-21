@@ -72,7 +72,7 @@ export const updateClient = async data => {
     country_id: String(data.country_id),
   };
 
-  axiosInstance.post(`user-update/${data.id}`, clientData, {
+  axiosInstance.post(`user-update/${data.user.id}`, clientData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
       'Content-Type': 'application/json',

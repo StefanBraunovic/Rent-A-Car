@@ -1,9 +1,7 @@
 import React, { useEffect, useState} from 'react';
-import { Table, Space,Button,DatePicker } from 'antd';
-import {SearchOutlined } from '@ant-design/icons';
-// import { getAllClients} from '../../services/clients';
-import { getReservations, getAllReservations} from '../../services/reservations';
-import { useInfiniteQuery,useQuery } from 'react-query'
+import { Table, Space,Button} from 'antd';
+import {  getAllReservations} from '../../services/reservations';
+import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
 import { useHistory } from 'react-router-dom';
 
@@ -12,16 +10,14 @@ const Reservations = () =>{
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [content, setContent] = useState('');
     const history = useHistory()
-    const[isSearching,setIsSearching] = useState(false);
     const[search,setSearch] = useState('');
-      const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery('reservations', getAllReservations, {
+      const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(['reservations',search], getAllReservations, {
           getNextPageParam: ((lastPage) => {
               const currentPageNo = lastPage.data.current_page;
               const totalPageNo = lastPage.data.last_page;
               return currentPageNo === totalPageNo ? undefined : currentPageNo + 1;
           }),
       })
-      // const { isLoading, isError, reservationData, error } = useQuery(['reservations', ()=>getReservations(search));
   
       let tableData = [];
       data?.pages.forEach((page) => {
@@ -80,7 +76,7 @@ const Reservations = () =>{
               dataIndex: ['return_location', 'name'],
             },
             {
-              title: 'Total Price $',
+              title: 'Total Price',
               key: 'total_price',
               dataIndex: 'total_price',
             },
@@ -92,9 +88,6 @@ const Reservations = () =>{
                   <button onClick={() => { showModal(); setContent(
                     // <Demo title='Delete'/>
                   );}} >Delete</button>
-                 <button onClick={() => { showModal(); setContent(
-                    // <Demo  title='Edit'/>
-                  );}} >Edit</button>
                 </Space>
               ),
           },
@@ -107,22 +100,11 @@ const Reservations = () =>{
         <Modal title="Basic Modal" visible={isModalVisible}>
          {content}
         </Modal>
-        <div>
-                <DatePicker.RangePicker onChange={(e)=>{
-                    if(e) {
-                        console.log(e[0]._d)
-                        setIsSearching(true);
-                    }else{
-                        setIsSearching(false);
-                    }
-                }} />
-                <Button style={{paddingTop:2,pointerEvents:"none"}}  loading={isSearching} icon={<SearchOutlined />} />
-            </div>
-         <Table onRow={(record, rowIndex) => {
+         <Table style={{tableLayout:'unset'}} onRow={(record, rowIndex) => {
       return {
         onClick: event => {  setIsModalVisible(true)}, 
       };
-    }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400 }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
+    }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400, x:true }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>
   }
   

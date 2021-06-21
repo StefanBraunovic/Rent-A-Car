@@ -9,7 +9,7 @@ import logo from '../../images/logo.png';
 import {useHistory} from 'react-router-dom';
 
 import {Login,me} from '../../services/account'
-import { auth, saveAuth } from '../../functions/helper';
+import {  saveAuth } from '../../functions/helper';
 import {ROLES} from "../../constants/constants";
 
 

@@ -1,5 +1,4 @@
 import {RESERVATION_STATUS} from '../constants/constants';
-import {message} from 'antd';
 
 export const auth = () => {
   return JSON.parse(localStorage.getItem('auth'));
@@ -50,7 +49,7 @@ export const concatData = data => {
   return [].concat.apply([], arrData);
 };
 
-export const concatData1 = data => {
+export const concatDataTwo = data => {
   let arrData = [];
   let pages = data?.pages;
   if (pages) {

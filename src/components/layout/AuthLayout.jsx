@@ -12,7 +12,7 @@ const AuthLayout = ({children}) => {
       <SiderDemo/>
         <Content style={{padding:'40px'}} >{children}</Content>
       </Layout>
-        <Footer style={{textAlign:'center'}}>Footer</Footer>
+        <Footer style={{textAlign:'center'}}>Amplitudo Academy 2020/2021</Footer>
     </Layout>
        
    

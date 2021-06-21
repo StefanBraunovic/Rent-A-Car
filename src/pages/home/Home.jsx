@@ -12,7 +12,7 @@ const account =  me().then((r)=>{
   })
   
     return <div style={{textAlign:'center' ,backgroundColor:'skyblue'}}>
-        <h1 style={{fontSize:'8vh'}}>Welcome {userName} </h1>
+        <h1 style={{fontSize:'4vh'}}>Welcome {userName} </h1>
         <div class="cybertruck">
 	<div class="tire tire--front"></div>
 	<div class="tire tire--back"></div>

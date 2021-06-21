@@ -1,7 +1,11 @@
 import axiosInstance from './axios';
 
 export const getAllReservations = ({queryKey, pageParam = 1}) => {
-  return axiosInstance.get('reservations?page=' + pageParam, {
+  let url = 'reservations?page=' + pageParam;
+  if (queryKey[1]) {
+    url += `&search=${queryKey[1]}`;
+  }
+  return axiosInstance.get(url, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
     },
