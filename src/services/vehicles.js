@@ -46,21 +46,21 @@ export const addVehicle = data => {
 };
 
 export const updateVehicle = data => {
-  const vehicleData = {
-    plate_no: data.plate_no,
-    production_year: String(data.production_year),
-    car_type_id: data.car_type_id,
-    no_of_seats: data.no_of_seats,
-    price_per_day: data.price_per_day,
-    remarks: data.remarks,
-    'photo[]': data.photo,
-  };
-  console.log(data.photo);
-  console.log(data.photo);
-  return axiosInstance.post(`vehicle-update/${data.id}`, vehicleData, {
+  console.log('update data', data);
+  const formData = new FormData();
+  Object.keys(data).forEach(prop => {
+    if (prop === 'car_type') return;
+    if (prop === 'photo') {
+      formData.append('photo', data[prop]);
+    } else {
+      formData.append(prop, String(data[prop]));
+      console.log(prop, data[prop]);
+    }
+  });
+  return axiosInstance.post(`vehicle-update/${data.id}`, formData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
   });
 };

@@ -93,11 +93,11 @@ const Clients = ()=>{
             title: 'Action',
             key: 'action',
             render: (record) => (
-              <Space size="middle">
-                <button onClick={() => { showModal(); setContent(
+              <Space size="middle" >
+                <button onClick={(event) => { event.stopPropagation(); showModal(); setContent(
                   <Demo title='Delete' ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Delete</button>
-               <button onClick={() => {  showModal(); setContent(
+               <button onClick={(event) => { event.stopPropagation();  showModal(); setContent(
                   <Demo  title='Edit'  ClientId={record} onSuccessCallback={closeModal} />
                 );}} >Edit</button>
               </Space>
@@ -107,20 +107,28 @@ const Clients = ()=>{
 
     return <div>
       <Button style={{border:'none'}}
-      onClick={() => { showModal(); setContent(
-        <Demo title='Add new client' onSuccessCallback={closeModal} />
-      ); }}
+        onClick={() => { 
+          showModal(); 
+          setContent(
+            <Demo title='Add new client' onSuccessCallback={closeModal} />
+          ); 
+        }}
       >add new client</Button>
       
-      <Modal footer={null} title="Basic Modal" onCancel={handleCancel} visible={isModalVisible}>
+      <Modal destroyOnClose footer={null} title="Basic Modal" onCancel={handleCancel} visible={isModalVisible}>
        {content}
       </Modal>
       <Input.Search placeholder="Pretrazi klienta" allowClear onSearch={(e)=>{ setSearch(e); }} style={{ width: 200 }} />
       
    
-      <Table   onRow={(record, rowIndex) => {
+      <Table onRow={(record, rowIndex) => {
     return {
-      onClick: event => {  showModal();    }, 
+      onClick: (event) => {
+        showModal(); 
+        setContent(
+          <Demo title='Show' ClientId={record} onSuccessCallback={closeModal} />
+        );
+      }
     };
   }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400  ,x:true }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>

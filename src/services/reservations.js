@@ -19,7 +19,7 @@ export const createReservation = data => {
 };
 
 export const showReservation = id => {
-  return axiosInstance.post(`reservation-show${id}`, {
+  return axiosInstance.get(`reservation-show/${id}`, {
     headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
   });
 };

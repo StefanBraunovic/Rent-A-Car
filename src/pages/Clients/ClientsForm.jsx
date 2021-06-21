@@ -37,20 +37,23 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
      const [loading,setLoading] = useState(true)
      const { handleSubmit, control, reset, setValue, formState:{ errors } } = useForm(
 		 { defaultValues: {
-			id:'',
-	  name:'',
-	  identification_document_no:'',
-	  phone_no:'',
-	  country_id:'',
-	  remarks:'',
+	  name: ClientId?.name,
+	  identification_document_no: ClientId?.identification_document_no,
+	  phone_no: ClientId?.phone_no,
+	  country_id: ClientId?.country_id,
+	  remarks: ClientId?.remarks,
 		  }},
           {  resolver: yupResolver(schema)}
 
      );
 
+     console.log(title);
+
      const queryClient = useQueryClient(initialData);
 
      const {data} = useQuery('countries',getAllCountries);
+
+     const formDisabled = title === 'Show';
 
      const updateMutation = useMutation(
           ['updateMutation', ClientId],
@@ -163,7 +166,8 @@ return (
                     name="name"
                     control={control}
                     rules={{ required: true}}
-                    render={({ field }) => <Input
+                    render={({ field }) => <Input disabled={formDisabled}
+
                 {...field} />}
                />
 <p style={{color:'red'}}>{errors.name?.type === 'required' && 'This field is required'}
@@ -179,7 +183,7 @@ return (
                     name="email"
                     control={control}
                     rules={{ required: true}}
-                    render={({ field }) => <Input  {...field} />}
+                    render={({ field }) => <Input disabled={formDisabled}  {...field} />}
                />
 <p style={{color:'red'}}>{errorsBack === 'The email has already been taken.' ? 'The email has already been taken.' : '' }</p>
 <p style={{color:'red'}}>{errors.email?.type === 'required' && 'This field is required' }</p>
@@ -195,7 +199,7 @@ return (
                     name="country_id"
                     control={control}
                     rules={{ required: true}}
-                    render={({ field }) =>     <Select defaultValue='choose country' options={
+                    render={({ field }) =>     <Select disabled={formDisabled} defaultValue='choose country' options={
                          data?.data.map((country) => {
                               return { label: country.name, value: country.id };
                          }) || []
@@ -215,7 +219,7 @@ return (
                     control={control}
 
                     rules={{ required: true}}
-                    render={({ field }) => <Input  {...field} />}
+                    render={({ field }) => <Input disabled={formDisabled}  {...field} />}
                />
 <p style={{color:'red'}}>{errors.identification_document_no?.type === 'required' && 'This field is required' }</p>
 <p style={{color:'red'}}>{errors.identification_document_no?.message ? 'ID or Passport must be a number' : '' }</p>
@@ -235,7 +239,7 @@ return (
                     name="phone_no"
                     control={control}
                     rules={{ required: true}}
-                    render={({ field }) => <Input  {...field} />}
+                    render={({ field }) => <Input disabled={formDisabled}  {...field} />}
                />
 <p style={{color:'red'}}>{errors.phone_no?.type === 'required' && 'This field is required' }</p>
 <p style={{color:'red'}}>{errors.phone_no?.message ? 'Phone must be a number' : ''
@@ -254,7 +258,7 @@ return (
                     name="remarks"
                     control={control}
                     rules={{ required: true}}
-                    render={({ field }) => <Input.TextArea {...field} />}
+                    render={({ field }) => <Input.TextArea disabled={formDisabled} {...field} />}
                />
 <p style={{color:'red'}}>{errors.remarks?.type === 'required' && 'This field is required' }</p>
 

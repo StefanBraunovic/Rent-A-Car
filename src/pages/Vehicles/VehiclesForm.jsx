@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {memo, useState} from 'react'
 import { Form, Input, Button ,message,Select,Steps} from 'antd';
 import { useMutation,useQueryClient,useQuery } from 'react-query';
 import {addVehicle, deleteVehicle, getVehicleType, updateVehicle} from '../../services/vehicles'
@@ -29,7 +29,7 @@ const VehiclesForm = ({title,vehicleId}) => {
   const history = useHistory();
   const [current, setCurrent] = React.useState(0);
   const queryClient = useQueryClient();
-  const {data} = useQuery('car-types',getVehicleType);
+  const {data: carTypes} = useQuery('car-types', getVehicleType);
   const next = () => {
     setCurrent(current + 1);
   };
@@ -47,12 +47,10 @@ const VehiclesForm = ({title,vehicleId}) => {
     {
       onSuccess: () => {
         message.success(('successMessages.updated'));
-        queryClient.refetchQueries('clients');
-
+        queryClient.refetchQueries('vehicles');
       },
       onError: (error) => {
-     
-    
+        console.log('err', error);
         setErrors(error.response.data.message)
       },
     }
@@ -93,7 +91,6 @@ const VehiclesForm = ({title,vehicleId}) => {
     })
     }
 
-  console.log(data?.data?.data);
   const onDelete = () => {
        deleteVehicle(vehicleId)
        .then((r)=>{
@@ -159,7 +156,7 @@ const steps = [
         control={control}
         rules={{ required: true}}
         render={({ field }) =>     <Select defaultValue='choose' options={
-          data?.data?.data.map((car) => {
+          carTypes?.data?.data.map((car) => {
             return { label: car.name, value: car.id };
           }) || []
         }  {...field} />
@@ -272,4 +269,4 @@ return (
   );
 };
 
-export default VehiclesForm;
+export default memo(VehiclesForm);

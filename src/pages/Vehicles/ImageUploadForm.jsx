@@ -6,7 +6,7 @@ function ImageUpload() {
 
  return (
     <form>
-      <input style={{padding:'8px'}} {...methods.register("photo[]")} type="file" accept="image/" max={5} mix={1}     multiple  />
+      <input style={{padding:'8px'}} {...methods.register("photo[]", {required:true, min:1, max:5})} type="file" accept="image/" max={5} mix={1}     multiple  />
     
     </form>
     

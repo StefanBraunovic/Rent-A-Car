@@ -4,7 +4,7 @@ import axiosInstance from './axios';
 export const Login = data => {
   return axios({
     method: 'POST',
-    baseURL: 'http://akademija-api.proserver.me/api/',
+    baseURL: 'http://127.0.0.1:8000/api/',
     url: '/auth/login',
     data: data,
   });

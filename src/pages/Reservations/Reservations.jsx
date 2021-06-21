@@ -4,6 +4,7 @@ import {  getAllReservations} from '../../services/reservations';
 import { useInfiniteQuery } from 'react-query'
 import { Modal} from 'antd';
 import { useHistory } from 'react-router-dom';
+import ShowReservation from './components/ShowReservation';
 
 const Reservations = () =>{
 
@@ -23,6 +24,10 @@ const Reservations = () =>{
       data?.pages.forEach((page) => {
           tableData.push(...page.data.data);
       })
+
+      const handleCancel = () => {
+        setIsModalVisible(false);
+      };
     
       const showModal = ()=>{
         
@@ -97,12 +102,16 @@ const Reservations = () =>{
         <Button className="dashed" onClick={()=>{
           history.push('/add-reservations')
           }}>add reservations</Button>
-        <Modal title="Basic Modal" visible={isModalVisible}>
+        <Modal  onCancel={handleCancel} footer={null} visible={isModalVisible}>
          {content}
         </Modal>
          <Table style={{tableLayout:'unset'}} onRow={(record, rowIndex) => {
       return {
-        onClick: event => {  setIsModalVisible(true)}, 
+        onClick: event => {setContent(<ShowReservation reservationId={record.id} from_date={record.from_date} to_date={record.to_date} rentLocation={record.rent_location.name}
+        returnLocation={record.return_location.name} totalPrice={record.total_price} plateNo={record.vehicle.plate_no} prodYear={record.vehicle.production_year}
+        carType={record.vehicle.car_type.name} noSeats={record.vehicle.no_of_seats} pd={record.price_per_day} equip={record.equipment}
+
+        />); console.log(record); setIsModalVisible(true)}, 
       };
     }} columns={columns} rowKey={(client) => `client-${client.id}`} scroll={{ y: 400, x:true }} dataSource={tableData}  pagination={false} loading={isFetchingNextPage} />
       </div>
