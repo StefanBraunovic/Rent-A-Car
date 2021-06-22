@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import 'antd/dist/antd.css';
 import {Link, useHistory} from 'react-router-dom';
 import {Menu, Dropdown, Button, Avatar, Col, Row, Modal} from 'antd';
+import {UserOutlined} from '@ant-design/icons';
+
 import uuid from 'react-uuid';
 import Title from 'antd/lib/typography';
 import logo from '../../images/logo.png';
-import VehiclesForm from '../../pages/Vehicles/VehiclesForm';
+import VehiclesForm from '../../pages/Vehicles/components/VehiclesForm';
 import ClientsForm from '../../pages/Clients/ClientsForm';
 import {me} from '../../services/account';
 import {auth} from '../../functions/helper';
@@ -102,7 +104,9 @@ const NavbarTop = () => {
         <Avatar style={{height: '55px', width: '55px'}} src={logo} />
       </Col>
       <Col span={6}>
-        <Title style={{color: 'white'}}>{userName}</Title>
+        <Title style={{color: 'white', fontSize: '20px'}}>
+          {userName} <UserOutlined />
+        </Title>
       </Col>
 
       <Col span={12}>
@@ -110,11 +114,7 @@ const NavbarTop = () => {
           <Button style={{float: 'right', margin: '20px 0 0 1px'}}>Menu</Button>
         </Dropdown>
       </Col>
-      <Modal
-        title="Basic Modal"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}>
+      <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         {content}
       </Modal>
     </Row>

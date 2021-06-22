@@ -31,7 +31,7 @@ export const updateReservation = id => {
 };
 
 export const deleteReservation = id => {
-  return axiosInstance.delete(`reservation-update${id}`, {
+  return axiosInstance.delete(`reservation-delete/${id}`, {
     headers: {Authorization: `Bearer ${localStorage.getItem('jwt-token')}`},
   });
 };
@@ -43,7 +43,7 @@ export const getLocations = () => {
 };
 
 export async function getReservations(queryKey) {
-  console.log(queryKey);
+  
   const page = queryKey?.pageParam || 1;
   const search = queryKey?.queryKey[1];
   const res = await axiosInstance.get('/reservations', {

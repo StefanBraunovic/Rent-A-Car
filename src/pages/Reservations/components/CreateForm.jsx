@@ -43,7 +43,7 @@ const CreateForm = ({
         data={{
           type: 'text',
           name: 'vehicle',
-          label: 'Vozilo',
+          label: 'Vehicle',
           required: false,
           input_params: {
             disabled: true,
@@ -58,10 +58,10 @@ const CreateForm = ({
         data={{
           type: 'select_async',
           name: 'client_id',
-          label: 'Klijent',
+          label: 'Client',
           required: true,
           helper_params: {
-            placeholder: 'Izaberite klijenta',
+            placeholder: 'Choose client',
             loadOptions: getClientsOptions,
             defaultValue: '',
           },
@@ -79,7 +79,7 @@ const CreateForm = ({
           required: true,
           input_params: {
             style: {width: '100%'},
-            placeholder: 'Izaberite datum od',
+            placeholder: 'From date',
             allowClear: true,
             onChange: e => {
               let to_date = getValues('to_date');
@@ -108,17 +108,17 @@ const CreateForm = ({
         data={{
           type: 'date',
           name: 'to_date',
-          label: 'Datum do',
+          label: 'To date',
           required: true,
           input_params: {
             style: {width: '100%'},
-            placeholder: 'Izaberite datum do',
+            placeholder: 'to date',
             allowClear: true,
             onChange: e => {
               let from_date = getValues('from_date');
               let to_date = e;
               if (from_date && to_date) {
-                let days = to_date.diff(from_date, 'days'); // =1
+                let days = to_date.diff(from_date, 'days');
 
                 if (days > 0) setValue('total_price', days * price_per_day);
                 else setValue('total_price', 0);
@@ -166,7 +166,7 @@ const CreateForm = ({
         errors={errors}
         control={control}
       />
-      <p>Dodatna oprema:</p>
+      <p>Equipment:</p>
       <Input.Group>
         <Row gutter={12}>
           {equipment.map((e, i) => {

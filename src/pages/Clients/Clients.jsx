@@ -78,11 +78,11 @@ const Clients = () => {
       key: 'date_of_last_reservation',
       dataIndex: 'date_of_last_reservation',
     },
-    {
-      title: 'Remarks',
-      key: 'remarks',
-      dataIndex: 'remarks',
-    },
+    // {
+    //   title: 'Remarks',
+    //   key: 'remarks',
+    //   dataIndex: 'remarks',
+    // },
     {
       title: 'Action',
       key: 'action',
@@ -168,7 +168,7 @@ const Clients = () => {
         }}
         columns={columns}
         rowKey={client => `client-${client.id}`}
-        scroll={{y: 400, x: true}}
+        scroll={{y: 400, x: 1000}}
         dataSource={tableData}
         pagination={false}
         loading={isFetchingNextPage}

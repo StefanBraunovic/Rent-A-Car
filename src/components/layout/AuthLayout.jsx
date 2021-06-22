@@ -3,7 +3,7 @@ import NavbarTop from '../navbarTop/navbarTop';
 import SiderDemo from '../sider/SideBar';
 import {Layout} from 'antd';
 
-const {Header, Footer, Sider, Content} = Layout;
+const {Header, Footer, Content} = Layout;
 
 const AuthLayout = ({children}) => {
   return (

@@ -7,7 +7,6 @@ import {RESERVATION_STATUS} from '../../../constants/constants';
 import {useBottomScrollListener} from 'react-bottom-scroll-listener';
 
 const Home = () => {
-  const [page, setPage] = useState(1);
   const [equip, setEquip] = useState([]);
   const [showData, setShowData] = useState({});
   const [current, setCurrent] = useState(RESERVATION_STATUS.ALL);
@@ -123,7 +122,7 @@ const Home = () => {
         visible={showData?.id}
         onCancel={() => setShowData({})}
         footer={footer}>
-        <div>
+        <div style={{textAlign: 'center', backgroundColor: 'skyblue'}}>
           <h3>Reservation:</h3>
           <p>From :{showData?.from_date}</p>
           <p>To:{showData?.to_date}</p>

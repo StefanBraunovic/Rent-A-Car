@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, Button, message} from 'antd';
-import {SaveOutlined} from '@ant-design/icons';
 import CreateForm from './CreateForm';
 import moment from 'moment';
 import {createReservation} from './../../../services/reservations';
@@ -66,7 +65,7 @@ const CreateModal = ({
       className="login-form-button"
       key="cancel"
       onClick={handleCancel}>
-      Odustani
+      Cancel
     </Button>,
 
     <Button
@@ -74,10 +73,9 @@ const CreateModal = ({
       type="primary"
       key="ok"
       form="create-reservation-form"
-      icon={<SaveOutlined />}
       htmlType="submit"
       className="login-form-button">
-      Sacuvaj
+      Submit
     </Button>,
   ];
 

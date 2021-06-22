@@ -6,11 +6,9 @@ import {
   deleteVehicle,
   getVehicleType,
   updateVehicle,
-} from '../../services/vehicles';
+} from '../../../services/vehicles';
 import {useForm, FormProvider, Controller} from 'react-hook-form';
 import {useHistory} from 'react-router-dom';
-import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import ImageUpload from './ImageUploadForm';
 import Swal from 'sweetalert2';
 

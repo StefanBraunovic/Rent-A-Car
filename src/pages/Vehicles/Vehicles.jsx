@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Table, Tag, Space, Modal, Button, Input} from 'antd';
+import {Table, Space, Modal, Button, Input} from 'antd';
 import {getAllVehicles} from '../../services/vehicles';
 import {useInfiniteQuery} from 'react-query';
-import VehiclesForm from './VehiclesForm';
-import style from './Vehicles.module.css';
+import VehiclesForm from './components/VehiclesForm';
+import ShowVehicle from './components/ShowVehicle';
 
 const Vehicles = ({onSubmit}) => {
   const [content, setContent] = useState('');
@@ -24,10 +24,6 @@ const Vehicles = ({onSubmit}) => {
 
   const showModal = () => {
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -88,14 +84,18 @@ const Vehicles = ({onSubmit}) => {
       render: record => (
         <Space size="middle">
           <button
-            onClick={() => {
+            onClick={event => {
+              event.stopPropagation();
+
               showModal();
               setContent(<VehiclesForm title="Delete" vehicleId={record.id} />);
             }}>
             Delete
           </button>
           <button
-            onClick={() => {
+            onClick={event => {
+              event.stopPropagation();
+
               showModal();
               setContent(<VehiclesForm title="Edit" vehicleId={record} />);
             }}>
@@ -124,20 +124,36 @@ const Vehicles = ({onSubmit}) => {
         }}
         style={{width: 200}}
       />
-      <Modal footer={null} onCancel={handleCancel} visible={isModalVisible}>
+      <Modal
+        footer={null}
+        onCancel={handleCancel}
+        visible={isModalVisible}
+        destroyOnClose>
         {content}
       </Modal>
       <Table
         onRow={(record, rowIndex) => {
           return {
             onClick: event => {
+              console.log(record);
+              setContent(
+                <ShowVehicle
+                  photos={record.photos}
+                  plates={record.plate_no}
+                  prodYear={record.production_year}
+                  seats={record.no_of_seats}
+                  carType={record.car_type.name}
+                  pricePerDay={record.price_per_day}
+                  remarks={record.remarks}
+                />,
+              );
               setIsModalVisible(true);
             }, // click row
           };
         }}
         columns={columns}
         rowKey={vehicle => `vehicle-${vehicle.id}`}
-        scroll={{y: 400, x: true}}
+        scroll={{y: 400, x: 1000}}
         dataSource={tableData}
         pagination={false}
         loading={isFetchingNextPage}

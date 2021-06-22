@@ -1,5 +1,4 @@
 import React from 'react';
-import {showReservation} from '../../../services/reservations';
 
 const ShowReservation = ({
   reservationId,
@@ -16,7 +15,7 @@ const ShowReservation = ({
   equip,
 }) => {
   return (
-    <div>
+    <div style={{textAlign: 'center', backgroundColor: 'skyblue'}}>
       <h2>Reservation</h2>
       <p>From date: {from_date} </p>
       <p>To date: {to_date} </p>

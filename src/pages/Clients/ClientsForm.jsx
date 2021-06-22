@@ -13,8 +13,6 @@ import {
 import Loader from 'react-loader-spinner';
 import Swal from 'sweetalert2';
 
-const {TextArea} = Input;
-
 const initialData = {
   name: '',
   identification_document_no: '',
@@ -37,13 +35,14 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
   const {
     handleSubmit,
     control,
-    reset,
+
     setValue,
     formState: {errors},
   } = useForm(
     {
       defaultValues: {
         name: ClientId?.name,
+        email: ClientId?.email,
         identification_document_no: ClientId?.identification_document_no,
         phone_no: ClientId?.phone_no,
         country_id: ClientId?.country_id,
@@ -84,7 +83,6 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
 
   const onFinish = async data => {
     if (title === 'Add new client') {
-      reset();
       createClient(data)
         .then(r => {
           queryClient.refetchQueries('clients');
@@ -104,7 +102,6 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
       await updateMutation.mutateAsync(data);
       queryClient.refetchQueries('clients');
       onSuccessCallback();
-      reset();
     }
   };
 
@@ -128,7 +125,7 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
     return (
       <div>
         <div>
-          <h3>Are you sure to delete {ClientId.name}?</h3>
+          <h3>Delete {ClientId.name}?</h3>
         </div>
 
         <Button
@@ -243,23 +240,7 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
           {errors.phone_no?.message ? 'Phone must be a number' : ''}
         </p>
       </Form.Item>
-
-      <Form.Item label="Remarks" htmlFor="remarks" required={true}>
-        <Controller
-          name="remarks"
-          control={control}
-          rules={{required: true}}
-          render={({field}) => (
-            <Input.TextArea disabled={formDisabled} {...field} />
-          )}
-        />
-        <p style={{color: 'red'}}>
-          {errors.remarks?.type === 'required' && 'This field is required'}
-        </p>
-      </Form.Item>
-
-      <input type="submit" />
-
+      <input type="submit" disabled={formDisabled} />
       {loading === false ? <Loader /> : ''}
     </Form>
   );

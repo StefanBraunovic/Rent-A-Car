@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {Table, Space, Button} from 'antd';
-import {getAllReservations} from '../../services/reservations';
-import {useInfiniteQuery} from 'react-query';
+import {
+  deleteReservation,
+  getAllReservations,
+} from '../../services/reservations';
+import {useInfiniteQuery, useQueryClient} from 'react-query';
 import {Modal} from 'antd';
 import {useHistory} from 'react-router-dom';
 import ShowReservation from './components/ShowReservation';
+import Swal from 'sweetalert2';
 
 const Reservations = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [content, setContent] = useState('');
   const history = useHistory();
-  const [search, setSearch] = useState('');
+  const [search] = useState('');
+
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     ['reservations', search],
     getAllReservations,
@@ -22,6 +27,7 @@ const Reservations = () => {
       },
     },
   );
+  const queryClient = useQueryClient();
 
   let tableData = [];
   data?.pages.forEach(page => {
@@ -35,6 +41,11 @@ const Reservations = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
+
+  const onDelete = id => {
+    deleteReservation(id);
+  };
+
   useEffect(pageParams => {
     var tableContent = document.querySelector('.ant-table-body');
     tableContent.addEventListener('scroll', event => {
@@ -86,15 +97,29 @@ const Reservations = () => {
     {
       title: 'Action',
       key: 'action',
-      render: () => (
+      render: record => (
         <Space size="middle">
           <button
-            onClick={() => {
+            onClick={event => {
+              event.stopPropagation();
               showModal();
-              setContent();
-              // <Demo title='Delete'/>
+              setContent(
+                <div>
+                  <h3>Delete reservation for {record.client.name}</h3>
+                  <button
+                    style={{color: 'red'}}
+                    onClick={() => {
+                      onDelete(record.id);
+                      Swal.fire('You deleted  the client!');
+                      queryClient.refetchQueries('reservations');
+                      history.push('reservations');
+                    }}>
+                    Delete
+                  </button>
+                </div>,
+              );
             }}>
-            Delete
+            delete
           </button>
         </Space>
       ),
@@ -114,10 +139,9 @@ const Reservations = () => {
         {content}
       </Modal>
       <Table
-        style={{tableLayout: 'unset'}}
-        onRow={(record, rowIndex) => {
+        onRow={record => {
           return {
-            onClick: event => {
+            onClick: () => {
               setContent(
                 <ShowReservation
                   reservationId={record.id}
@@ -134,14 +158,12 @@ const Reservations = () => {
                   equip={record.equipment}
                 />,
               );
-              console.log(record);
               setIsModalVisible(true);
             },
           };
         }}
         columns={columns}
-        rowKey={client => `client-${client.id}`}
-        scroll={{y: 400, x: true}}
+        scroll={{y: 400, x: 1000}}
         dataSource={tableData}
         pagination={false}
         loading={isFetchingNextPage}

@@ -88,7 +88,7 @@ const ChangePassword = () => {
     <>
       <Button onClick={() => setOpenModal(true)}>Edit password</Button>
       <Modal
-        title="Izmjeni lozinku"
+        title="Change password"
         visible={openModal}
         onCancel={handleCancel}
         footer={footer}>
