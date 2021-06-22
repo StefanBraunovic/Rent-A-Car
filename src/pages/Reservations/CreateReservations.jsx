@@ -43,10 +43,9 @@ const CreateReservation = () => {
   const onRowClick = record => {
     return {
       onClick: () => {
-        console.log(record); //record.id
         setOpenModal({
           open: true,
-          title: 'Kreiraj rezervaciju',
+          title: 'Create reservation',
           id: record.id,
           data: record,
         });

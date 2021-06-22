@@ -37,14 +37,12 @@ const CreateModal = ({
 
   const onFinish = data => {
     let formData = getEquipmentData(data);
-    console.log(formData);
-    //delete formData.client;
+
     delete formData.vehicle;
     delete formData.total_price;
     formData.to_date = moment(formData.to_date).format('YYYY-MM-DD');
     formData.from_date = moment(formData.from_date).format('YYYY-MM-DD');
 
-    console.log(formData);
     setIsLoading(true);
     createReservation(formData)
       .then(res => {

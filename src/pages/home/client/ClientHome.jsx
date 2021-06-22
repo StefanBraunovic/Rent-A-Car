@@ -35,7 +35,6 @@ const Home = () => {
   });
 
   const openModal = data => {
-    console.log(data);
     setShowData(data);
     setEquip(data?.equipment);
   };
@@ -46,7 +45,7 @@ const Home = () => {
       onClick={() => {
         setShowData({});
       }}>
-      Zatvori
+      Cancel
     </Button>,
   ];
 

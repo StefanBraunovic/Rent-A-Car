@@ -75,6 +75,7 @@ const NavbarTop = () => {
               Logout
             </Button>
           </Menu.Item>
+          ;
         </div>
       ) : (
         <div>
@@ -92,6 +93,7 @@ const NavbarTop = () => {
               Logout
             </Button>
           </Menu.Item>
+          ;
         </div>
       )}
     </Menu>

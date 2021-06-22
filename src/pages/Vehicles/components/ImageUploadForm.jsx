@@ -1,19 +1,32 @@
 import React from 'react';
 import {useFormContext} from 'react-hook-form';
+import {ErrorMessage} from '@hookform/error-message';
 
 function ImageUpload() {
-  const methods = useFormContext();
+  const {
+    register,
+    formState: {errors},
+  } = useFormContext();
 
   return (
     <form>
       <input
         style={{padding: '8px'}}
-        {...methods.register('photo[]', {required: true, min: 1, max: 5})}
+        {...register('photo[]', {required: true})}
         type="file"
         accept="image/"
-        max={5}
-        mix={1}
         multiple
+      />
+      <ErrorMessage
+        errors={errors}
+        name="photo[]"
+        render={err => {
+          return (
+            <p style={{color: 'red', marginLeft: '10px'}}>
+              Minimum one image {err.message}
+            </p>
+          );
+        }}
       />
     </form>
   );

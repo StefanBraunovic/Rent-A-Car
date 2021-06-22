@@ -22,6 +22,7 @@ const ShowReservation = ({
       <p>Rent location: {rentLocation} </p>
       <p>Return location: {returnLocation} </p>
       <p>Total price: {totalPrice} €</p>
+      <h2>Vehicle</h2>
       <p>Plate number: {plateNo}</p>
       <p>Production Year: {prodYear}</p>
       <p>Car Type: {carType}</p>

@@ -110,14 +110,16 @@ const Vehicles = ({onSubmit}) => {
     <div>
       <Button
         style={{border: 'none'}}
-        onClick={() => {
+        onClick={event => {
+          event.stopPropagation();
+
           showModal();
           setContent(<VehiclesForm title="Add new vehicle" />);
         }}>
         add new vehicle
       </Button>
       <Input.Search
-        placeholder="Pretrazi klienta"
+        placeholder="Search vehicle"
         allowClear
         onSearch={e => {
           setSearch(e);
@@ -135,7 +137,6 @@ const Vehicles = ({onSubmit}) => {
         onRow={(record, rowIndex) => {
           return {
             onClick: event => {
-              console.log(record);
               setContent(
                 <ShowVehicle
                   photos={record.photos}

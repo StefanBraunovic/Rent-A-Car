@@ -34,7 +34,22 @@ const VehiclesForm = ({title, vehicleId}) => {
   const prev = () => {
     setCurrent(current - 1);
   };
-  const methods = useForm();
+  const methods = useForm(
+    title === 'Edit'
+      ? {
+          defaultValues: {
+            photos: vehicleId.photos,
+            plate_no: vehicleId.plate_no,
+            production_year: vehicleId.production_year,
+            no_of_seats: vehicleId.no_of_seats,
+            car_type_id: vehicleId.car_type_id,
+            name: vehicleId.name,
+            price_per_day: vehicleId.price_per_day,
+            remarks: vehicleId.remarks,
+          },
+        }
+      : {},
+  );
   const {
     setValue,
     reset,
@@ -45,29 +60,28 @@ const VehiclesForm = ({title, vehicleId}) => {
   const [errorsBack, setErrors] = useState();
 
   const updateMutation = useMutation(
-    ['updateMutation', vehicleId],
-    data => updateVehicle(data, vehicleId),
+    ['updateMutation', vehicleId?.id],
+    data => updateVehicle(data, vehicleId?.id),
     {
       onSuccess: () => {
         message.success('successMessages.updated');
         queryClient.refetchQueries('vehicles');
+        history.push('vehicles');
       },
       onError: error => {
-        console.log('err', error);
         setErrors(error.response.data.message);
       },
     },
   );
 
   const onSubmit = async data => {
-    console.log(data);
-    console.log(data);
     if (title === 'Add new vehicle') {
       reset();
       await addVehicle(data)
         .then(r => {
           Swal.fire('Good job!', 'You created the vehicle  !', 'success');
-          queryClient.refetchQueries('clients');
+          queryClient.refetchQueries('vehicles');
+          history.push('/vehicles');
         })
         .catch(err => {
           setErrors(err.response.data.message);
@@ -80,16 +94,9 @@ const VehiclesForm = ({title, vehicleId}) => {
       reset();
     }
   };
-  if (title === 'Edit') {
-    Object.keys(vehicleId).forEach(prop => {
-      setValue(prop, vehicleId[prop]);
-    });
-  }
 
   const onDelete = () => {
-    deleteVehicle(vehicleId).then(r => {
-      console.log(r);
-    });
+    deleteVehicle(vehicleId).then(r => {});
     history.push('/vehicles');
   };
   const steps = [
@@ -145,7 +152,6 @@ const VehiclesForm = ({title, vehicleId}) => {
               rules={{required: true}}
               render={({field}) => (
                 <Select
-                  defaultValue="choose"
                   options={
                     carTypes?.data?.data.map(car => {
                       return {label: car.name, value: car.id};
@@ -168,7 +174,7 @@ const VehiclesForm = ({title, vehicleId}) => {
               name="no_of_seats"
               control={control}
               rules={{required: true, max: 5, min: 2}}
-              render={({field}) => <Input {...field} />}
+              render={({field}) => <Input type="number" {...field} />}
             />
             <p style={{color: 'red'}}>
               {errors.no_of_seats?.type === 'required' &&
@@ -249,10 +255,7 @@ const VehiclesForm = ({title, vehicleId}) => {
   }
   return (
     <FormProvider {...methods}>
-      <form
-        action=" 
-    "
-        onSubmit={handleSubmit(onSubmit)}>
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
         <Steps style={{padding: '20px'}} current={current}>
           {steps.map(item => (
             <Step key={item.title} title={item.title} />

@@ -10,6 +10,7 @@ const ShowVehicle = ({
   pricePerDay,
   remarks,
 }) => {
+  console.log('vehicle photos', photos);
   return (
     <div style={{textAlign: 'center', backgroundColor: 'skyblue'}}>
       <h3>Car Info</h3>

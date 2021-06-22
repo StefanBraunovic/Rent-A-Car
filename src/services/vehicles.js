@@ -32,10 +32,15 @@ export const addVehicle = data => {
   const formData = new FormData();
   Object.keys(data).forEach(prop => {
     if (prop === 'photo') {
-      formData.append('photo[]', ...data[prop]);
+      const photosData = data[prop];
+   
+      Object.keys(photosData).forEach((photoIndex) => {
+        formData.append('photo[]', photosData[photoIndex]);
+      })
     } else {
       formData.append(prop, data[prop]);
     }
+    
   });
   return axiosInstance.post(`vehicle`, formData, {
     headers: {
@@ -45,19 +50,23 @@ export const addVehicle = data => {
   });
 };
 
-export const updateVehicle = data => {
-  console.log('update data', data);
+export const updateVehicle = (data, id) => {
   const formData = new FormData();
+  console.log('data', data, id);
   Object.keys(data).forEach(prop => {
-    if (prop === 'car_type') return;
     if (prop === 'photo') {
-      formData.append('photo', data[prop]);
+      const photosData = data[prop];
+  
+      Object.keys(photosData).forEach((photoIndex) => {
+        formData.append('photo[]', photosData[photoIndex]);
+      })
     } else {
-      formData.append(prop, String(data[prop]));
-      console.log(prop, data[prop]);
+      formData.append(prop, data[prop]);
     }
+
   });
-  return axiosInstance.post(`vehicle-update/${data.id}`, formData, {
+
+  return axiosInstance.post(`vehicle-update/${id}`, formData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('jwt-token')}`,
       'Content-Type': 'multipart/form-data',
@@ -73,7 +82,6 @@ export const getEquipment = () => {
   });
 };
 export async function getAvailableVehicles(queryKey) {
-  //console.log(queryKey)
   const page = queryKey?.pageParam || 1;
   const search = queryKey?.queryKey[1];
   const res = await axiosInstance.get('/cars-available', {

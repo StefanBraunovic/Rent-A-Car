@@ -52,8 +52,6 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
     {resolver: yupResolver(schema)},
   );
 
-  console.log(title);
-
   const queryClient = useQueryClient(initialData);
 
   const {data} = useQuery('countries', getAllCountries);
@@ -108,7 +106,6 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
   const onDelete = () => {
     setLoading(true);
     deleteUser(ClientId.user.id).then(r => {
-      console.log(r);
       queryClient.refetchQueries('clients');
       onSuccessCallback();
       Swal.fire('You deleted  the client!');

@@ -1,8 +1,8 @@
-import './App.css';
-import Home from './pages/home/Home';
+import React, { Suspense } from 'react'
+// import Home from './pages/home/Home';
 import {Switch, Route} from 'react-router-dom';
 import PrivateRoute from './privateRoute/PrivateRoute';
-import LoginPage from './pages/login/Login';
+// import LoginPage from './pages/login/Login';
 import Clients from './pages/Clients/Clients';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {ReactQueryDevtools} from 'react-query/devtools';
@@ -11,6 +11,13 @@ import Reservations from './pages/Reservations/Reservations';
 import CreateReservations from './pages/Reservations/CreateReservations';
 import {ROLES} from './constants/constants';
 import ClientHome from './pages/home/client/ClientHome';
+import './App.css';
+import { Spin} from 'antd';
+
+
+const Login = React.lazy(() => import('./pages/login/Login'))
+const Home = React.lazy(() => import('./pages/home/Home'))
+
 
 const queryClient = new QueryClient();
 
@@ -21,7 +28,7 @@ function App() {
         <PrivateRoute
           path="/home"
           exact
-          component={Home}
+        component={()=> <Suspense fallback={ <Spin size="large"/>}><Home/></Suspense>}
           isPrivate
           role={ROLES.EMPLOYEE}
         />
@@ -61,7 +68,7 @@ function App() {
           role={ROLES.EMPLOYEE}
         />
 
-        <Route path="/" component={LoginPage} />
+        <Route path="/" component={()=> <Suspense fallback={ <Spin size="large"/>}><Login/></Suspense>} />
       </Switch>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -35,7 +35,6 @@ const LoginPage = () => {
   } = useForm({resolver: yupResolver(schema)});
 
   const onSubmit = data => {
-    console.log(data);
     Login(data)
       .then(function (response) {
         localStorage.setItem('jwt-token', response?.data['access_token']);
@@ -52,7 +51,6 @@ const LoginPage = () => {
         });
       })
       .catch(function (error) {
-        console.log(error?.response.data?.error);
         if (error?.response?.data?.error === 'Unauthorized') {
           setErrorMessage('Pogresni kredencijali');
         }
@@ -98,7 +96,6 @@ const LoginPage = () => {
                 {errors.password?.message}
               </p>
             </div>
-            <div></div>
             <input type="submit" className={style.signinBtn} />
             <span style={{color: 'red'}}>{errorMessage}</span>
           </div>

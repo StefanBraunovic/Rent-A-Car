@@ -143,7 +143,7 @@ const Clients = () => {
         {content}
       </Modal>
       <Input.Search
-        placeholder="Pretrazi klienta"
+        placeholder="Search vehicle"
         allowClear
         onSearch={e => {
           setSearch(e);
