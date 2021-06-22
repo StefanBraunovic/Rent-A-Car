@@ -1,5 +1,6 @@
 import React from 'react';
 import {Image} from 'antd';
+import uuid from 'react-uuid';
 
 const ShowVehicle = ({
   photos,
@@ -14,12 +15,12 @@ const ShowVehicle = ({
   return (
     <div style={{textAlign: 'center', backgroundColor: 'skyblue'}}>
       <h3>Car Info</h3>
-      <p>Plates -{plates}</p>
-      <p>Production Year - {prodYear}</p>
-      <p>Seats - {seats}</p>
-      <p>Car Type - {carType}</p>
-      <p>Price/Day - {pricePerDay}</p>
-      <p>Additional Remarks - {remarks}</p>
+      <p key={uuid()}>Plates -{plates}</p>
+      <p key={uuid()}>Production Year - {prodYear}</p>
+      <p key={uuid()}>Seats - {seats}</p>
+      <p key={uuid()}>Car Type - {carType}</p>
+      <p key={uuid()}>Price/Day - {pricePerDay}</p>
+      <p key={uuid()}>Additional Remarks - {remarks}</p>
       {photos.map(photo => {
         return (
           <Image
