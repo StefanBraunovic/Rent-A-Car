@@ -33,14 +33,13 @@ export const addVehicle = data => {
   Object.keys(data).forEach(prop => {
     if (prop === 'photo') {
       const photosData = data[prop];
-   
-      Object.keys(photosData).forEach((photoIndex) => {
+
+      Object.keys(photosData).forEach(photoIndex => {
         formData.append('photo[]', photosData[photoIndex]);
-      })
+      });
     } else {
       formData.append(prop, data[prop]);
     }
-    
   });
   return axiosInstance.post(`vehicle`, formData, {
     headers: {
@@ -52,18 +51,17 @@ export const addVehicle = data => {
 
 export const updateVehicle = (data, id) => {
   const formData = new FormData();
-  console.log('data', data, id);
+
   Object.keys(data).forEach(prop => {
     if (prop === 'photo') {
       const photosData = data[prop];
-  
-      Object.keys(photosData).forEach((photoIndex) => {
+
+      Object.keys(photosData).forEach(photoIndex => {
         formData.append('photo[]', photosData[photoIndex]);
-      })
+      });
     } else {
       formData.append(prop, data[prop]);
     }
-
   });
 
   return axiosInstance.post(`vehicle-update/${id}`, formData, {

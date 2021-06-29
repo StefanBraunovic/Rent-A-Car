@@ -3,7 +3,7 @@ import {Table, Space, Input, Button} from 'antd';
 import {getAllClients} from '../../services/clients';
 import {useInfiniteQuery} from 'react-query';
 import {Modal} from 'antd';
-import Demo from './ClientsForm';
+import ClientsForm from './ClientsForm';
 
 import {useForm} from 'react-hook-form';
 
@@ -93,7 +93,7 @@ const Clients = () => {
               event.stopPropagation();
               showModal();
               setContent(
-                <Demo
+                <ClientsForm
                   title="Delete"
                   ClientId={record}
                   onSuccessCallback={closeModal}
@@ -107,7 +107,7 @@ const Clients = () => {
               event.stopPropagation();
               showModal();
               setContent(
-                <Demo
+                <ClientsForm
                   title="Edit"
                   ClientId={record}
                   onSuccessCallback={closeModal}
@@ -128,7 +128,10 @@ const Clients = () => {
         onClick={() => {
           showModal();
           setContent(
-            <Demo title="Add new client" onSuccessCallback={closeModal} />,
+            <ClientsForm
+              title="Add new client"
+              onSuccessCallback={closeModal}
+            />,
           );
         }}>
         add new client
@@ -137,7 +140,7 @@ const Clients = () => {
       <Modal
         destroyOnClose
         footer={null}
-        title="Basic Modal"
+        title="Clients"
         onCancel={handleCancel}
         visible={isModalVisible}>
         {content}
@@ -157,7 +160,7 @@ const Clients = () => {
             onClick: event => {
               showModal();
               setContent(
-                <Demo
+                <ClientsForm
                   title="Show"
                   ClientId={record}
                   onSuccessCallback={closeModal}

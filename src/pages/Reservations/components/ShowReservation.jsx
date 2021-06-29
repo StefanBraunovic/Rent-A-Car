@@ -33,7 +33,7 @@ const ShowReservation = ({
       {equip.map(item => {
         return (
           <>
-            <p>
+            <p key={uuid()}>
               {item.name} - {item.max_quantity}
             </p>
           </>

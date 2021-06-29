@@ -29,7 +29,7 @@ const schema = yup.object().shape({
   phone_no: yup.number().required(),
 });
 
-const Demo = ({title, ClientId, onSuccessCallback}) => {
+const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
   const [errorsBack, setErrors] = useState();
   const [loading, setLoading] = useState(true);
   const {
@@ -65,7 +65,6 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
       onSuccess: () => {
         Swal.fire('Good job!', 'You edited  the client!', 'success');
         queryClient.refetchQueries('clients');
-        // onCancel();
       },
       onError: error => {
         Swal.fire(
@@ -243,4 +242,4 @@ const Demo = ({title, ClientId, onSuccessCallback}) => {
   );
 };
 
-export default Demo;
+export default ClientsForm;

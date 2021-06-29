@@ -7,7 +7,6 @@ import Car from '../../images/car-animation/car.png';
 import wheel from '../../images/car-animation/wheel.png';
 import logo from '../../images/logo.png';
 import {useHistory} from 'react-router-dom';
-
 import {Login, me} from '../../services/account';
 import {saveAuth} from '../../functions/helper';
 import {ROLES} from '../../constants/constants';
@@ -45,7 +44,6 @@ const LoginPage = () => {
             role: res?.data?.role_id === 1 ? ROLES.EMPLOYEE : ROLES.CLIENT,
             token: token,
           });
-          // localStorage.setItem('role', auth())
           localStorage.setItem('role_id', res?.data.role_id);
           history.push('/home');
         });

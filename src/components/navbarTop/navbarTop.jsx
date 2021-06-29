@@ -116,7 +116,11 @@ const NavbarTop = () => {
           <Button style={{float: 'right', margin: '20px 0 0 1px'}}>Menu</Button>
         </Dropdown>
       </Col>
-      <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        visible={isModalVisible}
+        footer={null}
+        onOk={handleOk}
+        onCancel={handleCancel}>
         {content}
       </Modal>
     </Row>
