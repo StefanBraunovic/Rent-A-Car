@@ -32,10 +32,10 @@ const NavbarTop = () => {
   };
 
   useEffect(() => {
-    me().then(r => {
-      setUserName(r.data.name);
-    });
-  });
+    let authObj = localStorage.getItem('auth');
+    let accName = JSON.parse(authObj);
+    setUserName(accName.name);
+  }, []);
 
   const menu = (
     <Menu>

@@ -40,17 +40,20 @@ const Clients = () => {
     setIsModalVisible(false);
   };
 
-  useEffect(pageParams => {
-    var tableContent = document.querySelector('.ant-table-body');
-    tableContent.addEventListener('scroll', event => {
-      // checking whether a selector is well defined
-      let maxScroll = event.target.scrollHeight - event.target.clientHeight;
-      let currentScroll = event.target.scrollTop;
-      if (currentScroll === maxScroll) {
-        fetchNextPage();
-      }
-    });
-  });
+  useEffect(
+    pageParams => {
+      var tableContent = document.querySelector('.ant-table-body');
+      tableContent.addEventListener('scroll', event => {
+        // checking whether a selector is well defined
+        let maxScroll = event.target.scrollHeight - event.target.clientHeight;
+        let currentScroll = event.target.scrollTop;
+        if (currentScroll === maxScroll) {
+          fetchNextPage();
+        }
+      });
+    },
+    [fetchNextPage],
+  );
 
   const columns = [
     {

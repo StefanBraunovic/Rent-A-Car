@@ -2,6 +2,7 @@ import {Form, Input, Button, Select} from 'antd';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
 import {useState} from 'react';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import {
@@ -156,7 +157,9 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
           name="email"
           control={control}
           rules={{required: true}}
-          render={({field}) => <Input disabled={formDisabled} {...field} />}
+          render={({field}) => (
+            <Input type="email" disabled={formDisabled} {...field} />
+          )}
         />
         <p style={{color: 'red'}}>
           {errorsBack === 'The email has already been taken.'
@@ -227,7 +230,9 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
           name="phone_no"
           control={control}
           rules={{required: true}}
-          render={({field}) => <Input disabled={formDisabled} {...field} />}
+          render={({field}) => (
+            <Input type="number" disabled={formDisabled} {...field} />
+          )}
         />
         <p style={{color: 'red'}}>
           {errors.phone_no?.type === 'required' && 'This field is required'}
