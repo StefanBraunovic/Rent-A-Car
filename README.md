@@ -1,5 +1,5 @@
 
-If live server is down this is a backend repo- https://github.com/rrade/rent_a_car_api
+If the live server is down this is a backend repo- https://github.com/rrade/rent_a_car_api
 
 
 1. `npm install`
