@@ -68,11 +68,11 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
         queryClient.refetchQueries('clients');
       },
       onError: error => {
-        Swal.fire(
-          'Something goes wrong!',
-
-          'error',
-        );
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something goes wrong!',
+        });
 
         setErrors(error.response.data.message);
       },
@@ -89,11 +89,12 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
           setLoading(true);
         })
         .catch(err => {
-          Swal.fire(
-            'Something goes wrong!',
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${err.response.data.message}`,
+          });
 
-            'error',
-          );
           setErrors(err.response.data.message);
         });
     } else if (title === 'Edit') {
@@ -151,6 +152,11 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
         <p style={{color: 'red'}}>
           {errors.name?.type === 'required' && 'This field is required'}
         </p>
+        <p style={{color: 'red'}}>
+          {errorsBack === 'The name field is required.'
+            ? 'The name field is required.'
+            : ''}
+        </p>
       </Form.Item>
       <Form.Item label="Email" htmlFor="email" required={true}>
         <Controller
@@ -204,7 +210,7 @@ const ClientsForm = ({title, ClientId, onSuccessCallback}) => {
           render={({field}) => <Input disabled={formDisabled} {...field} />}
         />
         <p style={{color: 'red'}}>
-          {errors.identification_document_no?.type === 'required' &&
+          {errorsBack === 'The identification document no field is required.' &&
             'This field is required'}
         </p>
         <p style={{color: 'red'}}>

@@ -10,6 +10,8 @@ import {useHistory} from 'react-router-dom';
 import {Login, me} from '../../services/account';
 import {saveAuth} from '../../functions/helper';
 import {ROLES} from '../../constants/constants';
+import {Button} from 'antd';
+import Swal from 'sweetalert2';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -33,11 +35,15 @@ const LoginPage = () => {
     formState: {errors},
   } = useForm({resolver: yupResolver(schema)});
 
+  const [isLoading, setLoading] = useState(false);
+
   const onSubmit = data => {
     Login(data)
       .then(function (response) {
         localStorage.setItem('jwt-token', response?.data['access_token']);
         let token = response?.data?.access_token;
+        setLoading(true);
+
         me(token).then(res => {
           saveAuth({
             name: res?.data?.name,
@@ -46,11 +52,16 @@ const LoginPage = () => {
           });
           localStorage.setItem('role_id', res?.data.role_id);
           history.push('/home');
+          setLoading(false);
         });
       })
       .catch(function (error) {
         if (error?.response?.data?.error === 'Unauthorized') {
-          setErrorMessage('Pogresni kredencijali');
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Wrong credentials!',
+          });
         }
       });
   };
@@ -90,11 +101,19 @@ const LoginPage = () => {
                   {...register('password')}
                 />
               </div>
-              <p style={{textAlign: 'center', color: 'red'}}>
-                {errors.password?.message}
-              </p>
+              <div>
+                <p style={{textAlign: 'center', color: 'red'}}>
+                  {errors.password?.message}
+                </p>
+              </div>
             </div>
-            <input type="submit" className={style.signinBtn} />
+            <Button
+              type="submit"
+              loading={isLoading}
+              className={style.signinBtn}
+              htmlType="submit">
+              Submit
+            </Button>
             <span style={{color: 'red'}}>{errorMessage}</span>
           </div>
         </div>
